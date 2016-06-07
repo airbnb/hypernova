@@ -1,0 +1,6 @@
+{
+  "rules": {
+    "object-shorthand": 0,
+    "func-names": 0
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "root": true,
+  "extends": "airbnb",
+  "env": {
+    "es6": true
+  },
+  "ecmaFeatures": {
+    "modules": true,
+    "jsx": true
+  },
+  "rules": {
+    "no-console": 0,
+    "no-underscore-dangle": 1
+  }
+}

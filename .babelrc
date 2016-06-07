@@ -1,0 +1,6 @@
+{
+  "presets": ["airbnb"],
+  "plugins": [
+    "add-module-exports"
+  ]
+}
