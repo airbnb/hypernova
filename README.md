@@ -78,7 +78,7 @@ bundle install hypernova
 
 Now lets add support on the Rails side for Hypernova. First, we‘ll need to create an initializer.
 
-`config/initializer/hypernova_initializer.rb`
+`config/initializers/hypernova_initializer.rb`
 
 ```ruby
 Hypernova.configure do |config|
