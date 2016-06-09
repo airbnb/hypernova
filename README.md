@@ -81,7 +81,7 @@ Now lets add support on the Rails side for Hypernova. First, we‘ll need to cre
 `config/initializer/hypernova_initializer.rb`
 
 ```ruby
-HypernovaRuby.configure do |config|
+Hypernova.configure do |config|
   config.host = "localhost"
   config.port = 3030            # The port where the node service is listening
 end
