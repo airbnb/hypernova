@@ -143,7 +143,7 @@ Depending on how you have `getComponent` configured, you might need to restart y
 
 ## FAQ
 
-> Isn‘t sending an HTTP request request slow?
+> Isn‘t sending an HTTP request slow?
 
 There isn‘t a lot of overhead or latency, especially if you keep the servers in close proximity to each other. It‘s as fast as compiling many ERB templates and gives you the benefit of unifying your view code.
 
