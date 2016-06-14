@@ -9,6 +9,7 @@ function cheerioToDOM($, className) {
     const node = cheerioObj;
     node.nodeName = node.name.toUpperCase();
     node.innerHTML = $(node).html();
+    node.getAttribute = () => '';
     return node;
   })[0];
 }
@@ -30,11 +31,12 @@ wrap().withGlobal('document', () => ({}))
         spy(className);
         return cheerioToDOM($, className);
       };
+      global.document.querySelectorAll = classname => [cheerioToDOM($, classname)];
 
       // Calling it again for the client.
       load('Component3');
 
-      assert.ok(spy.callCount === 2, 'our spy was called');
+      assert.ok(spy.calledOnce, 'our spy was called');
     });
 
     it('should not be called unless there is a node', () => {
@@ -42,11 +44,14 @@ wrap().withGlobal('document', () => ({}))
         querySelector() {
           return null;
         },
+        querySelectorAll() {
+          return [];
+        },
       };
 
-      const obj = load('foo');
+      const arr = load('foo');
 
-      assert.ok(Object.keys(obj).length === 0);
+      assert.ok(arr.length === 0);
 
       delete global.document;
     });
@@ -58,12 +63,15 @@ wrap().withGlobal('document', () => ({}))
         querySelector(className) {
           return cheerioToDOM($, className);
         },
+        querySelectorAll(className) {
+          return [cheerioToDOM($, className)];
+        },
       };
 
-      const { node, data } = load('Component3');
-
-      assert.isDefined(node);
-      assert.isObject(data, 'state is an object');
-      assert.equal(data.name, 'Serenity', 'state obj has proper state');
+      load('Component3').forEach(({ node, data }) => {
+        assert.isDefined(node);
+        assert.isObject(data, 'state is an object');
+        assert.equal(data.name, 'Serenity', 'state obj has proper state');
+      });
     });
   });
