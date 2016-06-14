@@ -249,7 +249,52 @@ hypernova({
 });
 ```
 
-### API
+## API
+
+### Browser
+
+#### load
+
+```typescript
+type DeserializedData = { [x: string]: any };
+type Node = { node: HTMLElement, data: DeserializedData };
+
+function load(name: string): Node {}
+```
+
+Looks up the server-rendered DOM markup and its corresponding `script` JSON payload and returns it.
+
+#### serialize
+
+```typescript
+type DeserializedData = { [x: string]: any };
+
+function serialize(name: string, html: string, data: DeserializedData): string {}
+```
+
+Generates the markup that the browser will need to bootstrap your view on the browser.
+
+#### toScript
+
+```typescript
+type DeserializedData = { [x: string]: any };
+
+function toScript(attr: string, key: string, props: DeserializedData): string {}
+```
+
+An interface that allows you to create extra `script` tags for loading more data on the browser.
+
+#### fromScript
+
+```typescript
+type DeserializedData = { [x: string]: any };
+
+function fromScript(attr: string, key: string): DeserializedData {}
+```
+
+The inverse of `toScript`, this function runs on the browser and attempts to find and `JSON.parse` the contents of the server generated script.
+
+### Server
 
 #### [createGetComponent](src/createGetComponent.js)
 
