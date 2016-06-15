@@ -110,7 +110,7 @@ import React from 'react';
 import { renderReact } from 'hypernova-react';
 
 function MyComponent(props) {
-  return <div>Hello, {this.props.name}!</div>;
+  return <div>Hello, {props.name}!</div>;
 }
 
 export default renderReact('MyComponent.js', MyComponent);
