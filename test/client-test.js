@@ -9,7 +9,7 @@ function cheerioToDOM($, className) {
     const node = cheerioObj;
     node.nodeName = node.name.toUpperCase();
     node.innerHTML = $(node).html();
-    node.getAttribute = () => '';
+    node.getAttribute = attr => $(node).data(attr.replace('data-', ''));
     return node;
   })[0];
 }

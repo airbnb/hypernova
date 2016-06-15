@@ -9,6 +9,7 @@ const ENCODE = [
 ];
 
 const DATA_KEY = 'hypernova-key';
+const DATA_ID = 'hypernova-id';
 
 // https://gist.github.com/jed/982883
 function uuid() {
@@ -40,13 +41,22 @@ function decode(res) {
   return JSON.parse(jsonPayload);
 }
 
-function toScript(attr, key, props, id) {
-  return `<script type="application/json" data-${attr}="${key}" data-hypernova-id=${id}>${LEFT}${encode(props)}${RIGHT}</script>`; // eslint-disable-line max-len
+function makeValidDataAttribute(attr, value) {
+  const encodedAttr = attr.toLowerCase().replace(/[^0-9a-z_\-]/g, '');
+  const encodedValue = value.replace(/&/g, '&amp;').replace(/"/g, '&quot;');
+  return `data-${encodedAttr}="${encodedValue}"`;
 }
 
-function fromScript(attr, key, id) {
-  const idSelector = id ? `[data-hypernova-id="${id}"]` : '';
-  const node = document.querySelector(`script[data-${attr}="${key}"]${idSelector}`);
+function toScript(attrs, data) {
+  const dataAttributes = Object.keys(attrs).map(name => makeValidDataAttribute(name, attrs[name]));
+  return `<script type="application/json" ${dataAttributes.join(' ')}>${LEFT}${encode(data)}${RIGHT}</script>`; // eslint-disable-line max-len
+}
+
+function fromScript(attrs) {
+  const selectors = Object.keys(attrs)
+    .map(name => `[${makeValidDataAttribute(name, attrs[name])}]`)
+    .join('');
+  const node = document.querySelector(`script${selectors}`);
   if (!node) return null;
   const jsonPayload = node.innerHTML;
 
@@ -56,8 +66,11 @@ function fromScript(attr, key, id) {
 function serialize(name, html, data) {
   const key = name.replace(/\W/g, '');
   const id = uuid();
-  const markup = `<div data-${DATA_KEY}="${key}" data-hypernova-id=${id}>${html}</div>`;
-  const script = toScript(DATA_KEY, key, data, id);
+  const markup = `<div data-${DATA_KEY}="${key}" data-${DATA_ID}="${id}">${html}</div>`;
+  const script = toScript({
+    [DATA_KEY]: key,
+    [DATA_ID]: id,
+  }, data);
   return `${markup}\n${script}`;
 }
 
@@ -66,8 +79,11 @@ function load(name) {
   const nodes = document.querySelectorAll(`div[data-${DATA_KEY}="${key}"]`);
 
   return Array.prototype.map.call(nodes, (node) => {
-    const id = node.getAttribute('data-hypernova-id');
-    const data = fromScript(DATA_KEY, key, id);
+    const id = node.getAttribute(`data-${DATA_ID}`);
+    const data = fromScript({
+      [DATA_KEY]: key,
+      [DATA_ID]: id,
+    });
     return { node, data };
   });
 }
