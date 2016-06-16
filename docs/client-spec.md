@@ -24,6 +24,36 @@
 9. If an error is encountered then return the string of HTML for client-rendering.
   - 8.1 Call `onError(error, jobs)`.
 
+## Client URL and Request Information
+
+#### Constructing the URL
+
+`HOST` is whatever you're running Hypernova on `localhost` usually works if you're testing locally.
+
+`PORT` is whatever is specified when you setup Hypernova. You can see an example [here in the README](https://github.com/airbnb/hypernova#node) and there's also [this working example](https://github.com/airbnb/hypernova/blob/master/examples/simple/hypernova.js#L13).
+
+The URL is `/batch` and that's just because that's what it was named. It's the [only route](https://github.com/airbnb/hypernova/blob/master/src/worker.js#L21) that is defined for express.
+
+So the full URL would be something like `http://localhost:3030/batch`
+
+#### Posting a batch of jobs
+
+The `POST` to `/batch` should look something like:
+
+```js
+{
+  "NameOfComponent": {
+    "name": "NameOfComponent",
+    "data": {
+      "theseAreProps": true,
+      "someOtherProps": ["one", "two", "three"]
+    },
+  }
+}
+```
+
+If [`getComponent`](https://github.com/airbnb/hypernova#getcomponent) returns something for `"NameOfComponent"` then you should be good to go.
+
 ## Plugin Lifecycle API
 
 ```typescript
