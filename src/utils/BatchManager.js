@@ -1,5 +1,9 @@
-function errorToSerializable(err) {
-  if (!err) return null;
+function errorToSerializable(error) {
+  // istanbul ignore next
+  if (error === undefined) throw new TypeError('No error was passed');
+
+  // make sure it is an error object so we can serialize it properly
+  const err = error instanceof Error ? error : new Error(error);
   return {
     type: err.type,
     name: err.name,
@@ -180,7 +184,7 @@ class BatchManager {
       duration: context.duration,
       statusCode: context.statusCode,
       success: context.html !== null,
-      error: errorToSerializable(context.error),
+      error: context.error ? errorToSerializable(context.error) : null,
     };
   }
 
