@@ -3,6 +3,7 @@ import { processBatch } from './lifecycle';
 import logger from './logger';
 
 export default (config, isClosing) => (req, res) => {
+  // istanbul ignore if
   if (isClosing()) {
     logger.info('Starting request when closing!');
   }
@@ -10,8 +11,9 @@ export default (config, isClosing) => (req, res) => {
 
   const manager = new BatchManager(req, res, jobs, config);
 
-  processBatch(jobs, config.plugins, manager)
+  return processBatch(jobs, config.plugins, manager)
     .then(() => {
+      // istanbul ignore if
       if (isClosing()) {
         logger.info('Ending request when closing!');
       }
