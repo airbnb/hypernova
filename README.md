@@ -112,14 +112,14 @@ And then in your view we `render_react_component`.
 Finally, lets set up `MyComponent.js` to be server-rendered. We will be using React to render.
 
 ```js
-import React from 'react';
-import { renderReact } from 'hypernova-react';
+const React = require('react');
+const renderReact = require('hypernova-react').renderReact;
 
 function MyComponent(props) {
   return <div>Hello, {props.name}!</div>;
 }
 
-export default renderReact('MyComponent.js', MyComponent);
+module.exports = renderReact('MyComponent.js', MyComponent);
 ```
 
 Visit the page and you should see your React component has been server-rendered. If you‘d like to confirm, you can view the source of the page and look for `data-hypernova-key`. If you see a `div` filled with HTML then your component was server-rendered, if the `div` is empty then there was a problem and your component was client-rendered as a fall-back strategy.
@@ -192,7 +192,7 @@ List of compatible browser packages:
 Starting up a Hypernova server
 
 ```js
-import hypernova from 'hypernova/server';
+const hypernova = require('hypernova/server');
 
 hypernova({
   getComponent: require,
@@ -228,7 +228,7 @@ The most common use-case would be to use a VM to keep each module sandboxed betw
 `createGetComponent` receives an Object whose keys are the component‘s registered name and the value is the absolute path to the component.
 
 ```js
-import path from 'path';
+const path = require('path');
 
 hypernova({
   getComponent: createGetComponent({
