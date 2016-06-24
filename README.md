@@ -51,7 +51,7 @@ Next, lets configure the development server. To keep things simple we can put th
 var hypernova = require('hypernova/server');
 
 hypernova({
-  devMode: true,
+  clustering: false,
 
   getComponent(name) {
     if (name === 'MyComponent.js') {
@@ -208,7 +208,7 @@ Options, and their defaults
     limit: 1024 * 1000,
   },
   // disables cluster mode and reloads each component every time it is requested
-  devMode: false,
+  clustering: true,
   // how components will be retrieved,
   getComponent: undefined,
   // configure the logger
