@@ -8,6 +8,6 @@ describe('Hypernova server', () => {
   });
 
   it('starts up the hypernova server without blowing up', () => {
-    hypernova({ devMode: true, getComponent: () => {} });
+    hypernova({ clustering: false, getComponent: () => {} });
   });
 });
