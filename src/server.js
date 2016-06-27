@@ -20,6 +20,7 @@ const defaultConfig = {
   logger: {},
   plugins: [],
   port: 8080,
+  endpoint: '/batch',
 };
 
 export default function hypernova(userConfig, onServer) {

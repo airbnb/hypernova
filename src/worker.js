@@ -18,7 +18,7 @@ export default (app, config, onServer, workerId) => {
   }
 
   // ===== Routes =============================================================
-  app.post('/batch', renderBatch(config, () => closing));
+  app.post(config.endpoint, renderBatch(config, () => closing));
 
   // ===== Exceptions =========================================================
   function exit(code) {
