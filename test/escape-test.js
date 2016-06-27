@@ -32,7 +32,7 @@ describe('escaping', () => {
     });
 
     it('escapes multiple times the same, with interleaved decoding', () => {
-      const makeHTML = () => toScript('attr', 'key', {
+      const makeHTML = () => toScript({ attr: 'key' }, {
         props: 'yay',
         needsEncoding: '" &gt; </script>', // "needsEncoding" is necessary
       });
@@ -44,7 +44,7 @@ describe('escaping', () => {
 
       global.document.querySelector = () => ({ innerHTML: $($('script')[0]).html() });
 
-      const res = fromScript('attr', 'key');
+      const res = fromScript({ attr: 'key' });
 
       const script3 = makeHTML();
       assert.equal(
