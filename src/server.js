@@ -16,11 +16,11 @@ const defaultConfig = {
     limit: 1024 * 1000,
   },
   devMode: false,
+  endpoint: '/batch',
   files: [],
   logger: {},
   plugins: [],
   port: 8080,
-  endpoint: '/batch',
 };
 
 export default function hypernova(userConfig, onServer) {
