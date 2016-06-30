@@ -4,7 +4,7 @@ import os from 'os';
 import logger from './utils/logger';
 import { raceTo } from './utils/lifecycle';
 
-const WORKER_COUNT = os.cpus().length - 1;
+const WORKER_COUNT = os.cpus().length - 1 || 1;
 
 function close() {
   return Promise.all(Object.values(cluster.workers).map((worker) => {
