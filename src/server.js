@@ -16,6 +16,7 @@ const defaultConfig = {
     limit: 1024 * 1000,
   },
   devMode: false,
+  endpoint: '/batch',
   files: [],
   logger: {},
   plugins: [],

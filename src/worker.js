@@ -7,20 +7,17 @@ import BatchManager from './utils/BatchManager';
 
 let closing = false;
 
-export default (app, config, onServer, workerId) => {
+const attachMiddleware = (app, config) => {
+  app.use(bodyParser.json(config.bodyParser));
+};
+
+const attachEndpoint = (app, config, callback) => {
+  app.post(config.endpoint, renderBatch(config, callback));
+};
+
+const initServer = (app, config, callback) => {
   let server;
 
-  // ===== Middleware =========================================================
-  app.use(bodyParser.json(config.bodyParser));
-
-  if (onServer) {
-    onServer(app, process);
-  }
-
-  // ===== Routes =============================================================
-  app.post('/batch', renderBatch(config, () => closing));
-
-  // ===== Exceptions =========================================================
   function exit(code) {
     return () => process.exit(code);
   }
@@ -93,14 +90,35 @@ export default (app, config, onServer, workerId) => {
    // run through the initialize methods of any plugins that define them
   runAppLifecycle('initialize', config.plugins, config)
     .then(() => {
-      server = app.listen(config.port, () => {
-        if (process.send) {
-          // tell our coordinator that we're ready to start receiving requests
-          process.send({ workerId, ready: true });
-        }
-
-        logger.info('Connected', { port: config.port });
-      });
+      server = app.listen(config.port, callback);
     })
     .catch(shutDownSequence);
 };
+
+const worker = (app, config, onServer, workerId) => {
+  // ===== Middleware =========================================================
+  attachMiddleware(app, config);
+
+  if (onServer) {
+    onServer(app, process);
+  }
+
+  // ===== Routes =============================================================
+  attachEndpoint(app, config, () => closing);
+
+  // ===== initialize server's nuts and bolts =================================
+  initServer(app, config, () => {
+    if (process.send) {
+      // tell our coordinator that we're ready to start receiving requests
+      process.send({ workerId, ready: true });
+    }
+
+    logger.info('Connected', { port: config.port });
+  });
+};
+
+worker.attachMiddleware = attachMiddleware;
+worker.attachEndpoint = attachEndpoint;
+worker.initServer = initServer;
+
+export default worker;
