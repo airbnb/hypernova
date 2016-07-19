@@ -1,7 +1,7 @@
 const hypernova = require('hypernova/server');
 
 hypernova({
-  clustering: false,
+  enableCluster: false, // default
 
   getComponent(name) {
     if (name === 'MyComponent.js') {
