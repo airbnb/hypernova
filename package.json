@@ -14,9 +14,6 @@
     "cover:check": "istanbul check-coverage && echo code coverage thresholds met, achievement unlocked!",
     "test:quick": "babel-node node_modules/.bin/_mocha -R tap test/init.js test/*-test.js"
   },
-  "pre-commit": [
-    "test"
-  ],
   "repository": {
     "type": "git",
     "url": "git@github.com:airbnb/hypernova.git"
@@ -66,7 +63,6 @@
     "istanbul": "^1.0.0-alpha.2",
     "mocha": "^2.5.3",
     "mocha-wrap": "^2.0.4",
-    "pre-commit": "^1.1.3",
     "rimraf": "^2.5.2",
     "sinon": "^1.17.4",
     "sinon-sandbox": "^1.0.2"
