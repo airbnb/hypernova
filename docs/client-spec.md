@@ -17,6 +17,7 @@
   - 5.3 Call `onError(error, jobs)`.
 6. When a response is received from the server:
   - 6.1 Iterate over the response, if the `error` field is not null then call `onError(error, job)` per job.
+  - 6.2 Ensure that every job has an `html` field and that it is a string. If there is no HTML then use the fallback client-rendered output.
 7. Call `onSuccess(response, jobs)`.
 8. Call `afterResponse(currentResponse, originalResponse)` as a reducer.
   - 7.1 Call `String()` on the result.
