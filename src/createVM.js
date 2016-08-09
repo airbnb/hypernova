@@ -25,7 +25,7 @@ export default (options = {}) => {
 
       if (exportsCache.has(key)) return exportsCache.get(key);
 
-      const environment = options.environment && options.environment();
+      const environment = options.environment && options.environment(name);
 
       const module = new Module(name, environment);
       module.load(name);
