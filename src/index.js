@@ -14,7 +14,7 @@ function encode(obj) {
 }
 
 function decode(res) {
-  const jsonPayload = ENCODE.reverse().reduce((str, coding) => {
+  const jsonPayload = ENCODE.reduceRight((str, coding) => {
     const [encodeChar, htmlEntity] = coding;
     return str.replace(new RegExp(htmlEntity, 'g'), encodeChar);
   }, res);
