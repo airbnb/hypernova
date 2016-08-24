@@ -20,10 +20,7 @@
   - 6.2 Ensure that every job has an `html` field and that it is a string. If there is no HTML then use the fallback client-rendered output.
 7. Call `onSuccess(response, jobs)`.
 8. Call `afterResponse(currentResponse, originalResponse)` as a reducer.
-  - 7.1 Call `String()` on the result.
-  - 7.2 If `afterResponse` is not defined then combine all of the response's `html` fields into a string.
-9. If an error is encountered then return the string of HTML for client-rendering.
-  - 8.1 Call `onError(error, jobs)`.
+9. If an error is encountered then call `onError(error, jobs)` and assert that the fallback HTML is provided.
 
 ## Client URL and Request Information
 
