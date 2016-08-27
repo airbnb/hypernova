@@ -21,7 +21,7 @@ function uuid() {
     -1e11
   ).replace(
     /[018]/g,
-    x => (x ^ Math.random() * 16 >> x / 4).toString(16)
+    x => (x ^ Math.random() * 16 >> x / 4).toString(16) // eslint-disable-line no-mixed-operators
   );
 }
 
