@@ -1,7 +1,8 @@
-import '../lib/environment';
 import { assert } from 'chai';
-import { makeJob } from './helper';
 import sinon from 'sinon';
+
+import '../lib/environment';
+import { makeJob } from './helper';
 import * as lifecycle from '../lib/utils/lifecycle';
 import BatchManager from '../lib/utils/BatchManager';
 

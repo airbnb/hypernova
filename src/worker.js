@@ -1,5 +1,6 @@
-import './environment';
 import bodyParser from 'body-parser';
+
+import './environment';
 import logger from './utils/logger';
 import renderBatch from './utils/renderBatch';
 import { runAppLifecycle, errorSync, raceTo } from './utils/lifecycle';

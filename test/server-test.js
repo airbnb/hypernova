@@ -1,5 +1,6 @@
-import hypernova from '../server';
 import { assert } from 'chai';
+
+import hypernova from '../server';
 
 describe('Hypernova server', () => {
   it('blows up if hypernova does not get getComponent', () => {

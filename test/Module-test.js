@@ -1,4 +1,5 @@
 import { assert } from 'chai';
+import has from 'has';
 import { Module } from '../server';
 import mutableArray from './mutableArray';
 
@@ -27,7 +28,7 @@ describe('Module', () => {
 
   it('loads a module and return the instance', () => {
     const module = Module.load('./test/mutableArray.js');
-    assert(module.hasOwnProperty('exports') === true, 'module has exports property');
+    assert(has(module, 'exports') === true, 'module has exports property');
     assert.isArray(module.exports, 'module.exports is our array');
   });
 

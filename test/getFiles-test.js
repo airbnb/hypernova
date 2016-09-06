@@ -1,6 +1,7 @@
 import { assert } from 'chai';
-import { getFiles } from '../server';
 import path from 'path';
+
+import { getFiles } from '../server';
 
 describe('getFiles', () => {
   it('retrieves files', () => {

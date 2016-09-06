@@ -1,10 +1,10 @@
-import './environment';
-
-import Module from './Module';
 import cluster from 'cluster';
+import express from 'express';
+
+import './environment';
+import Module from './Module';
 import coordinator from './coordinator';
 import createGetComponent from './createGetComponent';
-import express from 'express';
 import getFiles from './getFiles';
 import loadModules from './loadModules';
 import logger from './utils/logger';
@@ -36,12 +36,10 @@ export default function hypernova(userConfig, onServer) {
 
   if (config.devMode) {
     worker(app, config, onServer);
+  } else if (cluster.isMaster) {
+    coordinator();
   } else {
-    if (cluster.isMaster) {
-      coordinator();
-    } else {
-      worker(app, config, onServer, cluster.worker.id);
-    }
+    worker(app, config, onServer, cluster.worker.id);
   }
 
   return app;

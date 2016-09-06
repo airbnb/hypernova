@@ -1,3 +1,5 @@
+/* globals document */
+
 const LEFT = '<!--';
 const RIGHT = '-->';
 

@@ -1,6 +1,7 @@
-import createVM from './createVM';
 import fs from 'fs';
 import has from 'has';
+
+import createVM from './createVM';
 
 // This function takes in an Object of files and an Object that configures the VM. It will return
 // a function that can be used as `getComponent` for Hypernova.

@@ -1,6 +1,7 @@
-import './environment';
 import cluster from 'cluster';
 import os from 'os';
+
+import './environment';
 import logger from './utils/logger';
 import { raceTo } from './utils/lifecycle';
 

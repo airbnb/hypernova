@@ -1,6 +1,7 @@
 import { assert } from 'chai';
-import { makeJob, COMPONENT_NAME } from './helper';
 import sinon from 'sinon-sandbox';
+
+import { makeJob, COMPONENT_NAME } from './helper';
 import BatchManager from '../lib/utils/BatchManager';
 
 function mockPlugin() {
