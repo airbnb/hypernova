@@ -68,11 +68,11 @@
     "sinon-sandbox": "^1.0.2"
   },
   "dependencies": {
-    "airbnb-js-shims": "^1.0.0",
-    "bluebird": "^3.4.0",
-    "body-parser": "^1.15.1",
-    "express": "^4.13.4",
-    "glob": "^7.0.3",
+    "airbnb-js-shims": "^1.0.1",
+    "bluebird": "^3.4.6",
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "glob": "^7.0.6",
     "has": "^1.0.1",
     "lru-cache": "^4.0.1",
     "winston": "^2.2.0"
