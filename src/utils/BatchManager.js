@@ -138,7 +138,7 @@ class BatchManager {
 
     const { getComponent } = this.config;
 
-    const result = getComponent(name);
+    const result = getComponent(name, context);
 
     return Promise.resolve(result).then((renderFn) => {
       // ensure that we have this component registered
