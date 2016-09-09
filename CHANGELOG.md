@@ -5,6 +5,18 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [1.2.0] - 2016-09-08
+
+### Changed
+
+- Exceptions that are not Errors are no longer wrapped in an Error so the stack trace does not
+  include the Hypernova callsite.
+
+### Added
+
+- Passing in `context` into `getComponent` which contains things like the `props` that the
+  component will receive.
+
 ## [1.1.0] - 2016-06-15
 
 ### Changed
