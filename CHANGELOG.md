@@ -5,6 +5,28 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Changed
+
+- `toScript` function signature changed. It now expects an object of data attributes to value.
+
+  ```js
+  // before
+  toScript('foo', 'bar', { hello: 'world' })
+
+  // now
+  toScript({ foo: 'bar' }, { hello: 'world' })
+  ```
+
+- `fromScript` function signature changed.
+
+  ```js
+  // before
+  fromScript('foo', 'bar')
+
+  // now
+  fromScript({ foo: 'bar' })
+  ```
+
 ## [1.2.0] - 2016-09-08
 
 ### Changed

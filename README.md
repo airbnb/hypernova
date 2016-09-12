@@ -265,9 +265,9 @@ hypernova({
 
 ```typescript
 type DeserializedData = { [x: string]: any };
-type Node = { node: HTMLElement, data: DeserializedData };
+type ServerRenderedPair = { node: HTMLElement, data: DeserializedData };
 
-function load(name: string): Node {}
+function load(name: string): Array<ServerRenderedPair> {}
 ```
 
 Looks up the server-rendered DOM markup and its corresponding `script` JSON payload and returns it.
@@ -286,8 +286,9 @@ Generates the markup that the browser will need to bootstrap your view on the br
 
 ```typescript
 type DeserializedData = { [x: string]: any };
+type Attributes = { [x: string]: string };
 
-function toScript(attr: string, key: string, props: DeserializedData): string {}
+function toScript(attrs: Attributes, props: DeserializedData): string {}
 ```
 
 An interface that allows you to create extra `script` tags for loading more data on the browser.
@@ -296,11 +297,13 @@ An interface that allows you to create extra `script` tags for loading more data
 
 ```typescript
 type DeserializedData = { [x: string]: any };
+type Attributes = { [x: string]: string };
 
-function fromScript(attr: string, key: string): DeserializedData {}
+function fromScript(attrs: Attributes): DeserializedData {}
 ```
 
 The inverse of `toScript`, this function runs on the browser and attempts to find and `JSON.parse` the contents of the server generated script.
+`attrs` is an object where the key will be a `data-key` to be placed on the element, and the value is the data attribute's value.
 
 ### Server
 
