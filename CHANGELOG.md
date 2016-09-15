@@ -5,7 +5,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
-### Changed
+## [2.0.0] - 2016-09-15
+
+### Breaking Changes
 
 - `toScript` function signature changed. It now expects an object of data attributes to value.
 
