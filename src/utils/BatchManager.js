@@ -32,15 +32,6 @@ function notFound(name) {
   return error;
 }
 
-function msSince(start) {
-  const diff = process.hrtime(start);
-  return (diff[0] * 1e3) + (diff[1] / 1e6);
-}
-
-function now() {
-  return process.hrtime();
-}
-
 /**
  * The BatchManager is a class that is instantiated once per batch, and holds a lot of the
  * key data needed throughout the life of the request. This ends up cleaning up some of the
@@ -138,24 +129,30 @@ class BatchManager {
    * job context. Additionally, duration is calculated.
    */
   render(token) {
-    const start = now();
     const context = this.jobContexts[token];
     const name = context.name;
 
     const { getComponent } = this.config;
 
+    const timeStartGetComponent = process.hrtime();
     const result = getComponent(name, context);
 
     return Promise.resolve(result).then((renderFn) => {
+      const timeEndGetComponent = process.hrtime(timeStartGetComponent);
       // ensure that we have this component registered
       if (!renderFn || typeof renderFn !== 'function') {
         // component not registered
         context.statusCode = 404;
-        context.duration = msSince(start);
+        context.duration = {
+          getComponent: timeEndGetComponent,
+          render: null,
+        };
         throw notFound(name);
       }
 
       let response = null;
+
+      const timeStartRender = process.hrtime();
 
       // render the component!
       try {
@@ -163,7 +160,11 @@ class BatchManager {
       } catch (e) {
         response = Promise.reject(e);
       } finally {
-        context.duration = msSince(start);
+        const timeEndRender = process.hrtime(timeStartRender);
+        context.duration = {
+          getComponent: timeEndGetComponent,
+          render: timeEndRender,
+        };
       }
 
       return response;

@@ -147,7 +147,7 @@ describe('BatchManager', () => {
       manager.render('bar').catch(() => {
         const response = manager.getResults();
         assert.isDefined(response.results.bar.duration);
-        assert.isNumber(response.results.bar.duration);
+        assert.isObject(response.results.bar.duration);
 
         done();
       });
