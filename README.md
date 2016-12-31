@@ -100,6 +100,7 @@ class SampleController < ApplicationController
   around_action :hypernova_render_support
 end
 ```
+Use `:around_filter` instead of `:around_action` if you using version 3.2.13 or older.
 
 And then in your view we `render_react_component`.
 
