@@ -21,7 +21,7 @@ function uuid() {
     -1e11
   ).replace(
     /[018]/g,
-    x => (x ^ Math.random() * 16 >> x / 4).toString(16) // eslint-disable-line no-mixed-operators
+    x => (x ^ Math.random() * 16 >> x / 4).toString(16), // eslint-disable-line no-mixed-operators, no-bitwise, max-len
   );
 }
 
@@ -42,7 +42,7 @@ function decode(res) {
 }
 
 function makeValidDataAttribute(attr, value) {
-  const encodedAttr = attr.toLowerCase().replace(/[^0-9a-z_\-]/g, '');
+  const encodedAttr = attr.toLowerCase().replace(/[^0-9a-z_-]/g, '');
   const encodedValue = value.replace(/&/g, '&amp;').replace(/"/g, '&quot;');
   return `data-${encodedAttr}="${encodedValue}"`;
 }

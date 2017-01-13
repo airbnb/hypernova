@@ -24,7 +24,7 @@ const initServer = (app, config, callback) => {
   }
 
   function close() {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       if (!server) {
         resolve();
         return;

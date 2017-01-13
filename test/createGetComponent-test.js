@@ -4,9 +4,7 @@ import { createGetComponent } from '../server';
 
 describe('createGetComponent', () => {
   const files = {
-    HypernovaExample: path.resolve(
-      path.join('test', 'components', 'HypernovaExample.js')
-    ),
+    HypernovaExample: path.resolve(path.join('test', 'components', 'HypernovaExample.js')),
   };
 
   const getComponent = createGetComponent(files);
