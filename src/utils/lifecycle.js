@@ -53,15 +53,13 @@ export function raceTo(promise, ms, msg) {
 export function runAppLifecycle(lifecycle, plugins, config, error, ...args) {
   try {
     const promise = Promise.all(
-      plugins
-        .filter(hasMethod(lifecycle))
-        .map(plugin => plugin[lifecycle](config, error, ...args))
+      plugins.filter(hasMethod(lifecycle)).map(plugin => plugin[lifecycle](config, error, ...args)),
     );
 
     return raceTo(
       promise,
       MAX_LIFECYCLE_EXECUTION_TIME_IN_MS,
-      `App lifecycle method ${lifecycle} took too long.`
+      `App lifecycle method ${lifecycle} took too long.`,
     );
   } catch (err) {
     return Promise.reject(err);
@@ -90,13 +88,13 @@ export function runLifecycle(lifecycle, plugins, manager, token) {
     const promise = Promise.all(
       plugins
         .filter(hasMethod(lifecycle))
-        .map(plugin => plugin[lifecycle](manager.contextFor(plugin, token)))
+        .map(plugin => plugin[lifecycle](manager.contextFor(plugin, token))),
     );
 
     return raceTo(
       promise,
       MAX_LIFECYCLE_EXECUTION_TIME_IN_MS,
-      `Lifecycle method ${lifecycle} took too long.`
+      `Lifecycle method ${lifecycle} took too long.`,
     );
   } catch (err) {
     return Promise.reject(err);
@@ -192,7 +190,7 @@ export function processBatch(jobs, plugins, manager) {
 
     // for each job, processJob
     .then(() => Promise.all(
-      Object.keys(jobs).map(token => processJob(token, plugins, manager))
+      Object.keys(jobs).map(token => processJob(token, plugins, manager)),
     ))
 
     // batchEnd

@@ -35,7 +35,7 @@ describe('lifecycle', () => {
       const plugin = mockPlugin();
       const config = {};
 
-      lifecycle.runAppLifecycle('initialize', [plugin], config)
+      return lifecycle.runAppLifecycle('initialize', [plugin], config)
         .then(() => {
           assert.propertyVal(plugin.initialize, 'callCount', 1);
           assert.deepEqual(plugin.initialize.args[0][0], config);
@@ -56,7 +56,7 @@ describe('lifecycle', () => {
 
       plugin.initialize = sinon.stub().returns(promise);
 
-      lifecycle.runAppLifecycle('initialize', [plugin], config)
+      return lifecycle.runAppLifecycle('initialize', [plugin], config)
         .then(() => {
           assert.propertyVal(plugin.initialize, 'callCount', 1);
           assert.deepEqual(plugin.initialize.args[0][0], config);
@@ -70,7 +70,7 @@ describe('lifecycle', () => {
       plugins[0].initialize = sinon.stub().returns(Promise.resolve());
       plugins[1].initialize = sinon.stub().returns(Promise.resolve());
 
-      lifecycle.runAppLifecycle('initialize', plugins, config)
+      return lifecycle.runAppLifecycle('initialize', plugins, config)
         .then(() => {
           assert.equal(plugins[0].initialize.callCount, 1);
           assert.deepEqual(plugins[0].initialize.args[0][0], config);
@@ -87,7 +87,7 @@ describe('lifecycle', () => {
       const plugin = mockPlugin();
       const manager = batchManagerInstance(jobs, [plugin]);
 
-      lifecycle.runLifecycle('jobStart', [plugin], manager, 'foo')
+      return lifecycle.runLifecycle('jobStart', [plugin], manager, 'foo')
         .then(() => {
           assert.equal(plugin.jobStart.callCount, 1, 'calls the method passed in');
           assert.deepEqual(plugin.jobStart.args[0][0], manager.contextFor(plugin, 'foo'));
@@ -107,7 +107,7 @@ describe('lifecycle', () => {
       });
       plugins[0].jobStart = sinon.stub().returns(promise);
 
-      lifecycle.runLifecycle('jobStart', plugins, manager, 'foo')
+      return lifecycle.runLifecycle('jobStart', plugins, manager, 'foo')
         .then(() => {
           const context = manager.contextFor(plugins[0], 'foo');
           assert.equal(plugins[0].jobStart.callCount, 1);
@@ -188,30 +188,30 @@ describe('lifecycle', () => {
       sinon.stub(manager, 'recordError');
     });
 
-    it('calls lifecycle methods in correct order', () => {
+    it('calls lifecycle methods in correct order', () => (
       lifecycle.processJob('foo', plugins, manager)
-        .then(() => {
-          sinon.assert.callOrder(
-            plugins[0].jobStart,
-            plugins[1].jobStart,
-            plugins[2].jobStart,
+      .then(() => {
+        sinon.assert.callOrder(
+          plugins[0].jobStart,
+          plugins[1].jobStart,
+          plugins[2].jobStart,
 
-            plugins[0].beforeRender,
-            plugins[1].beforeRender,
-            plugins[2].beforeRender,
+          plugins[0].beforeRender,
+          plugins[1].beforeRender,
+          plugins[2].beforeRender,
 
-            manager.render,
+          manager.render,
 
-            plugins[0].afterRender,
-            plugins[1].afterRender,
-            plugins[2].afterRender,
+          plugins[0].afterRender,
+          plugins[1].afterRender,
+          plugins[2].afterRender,
 
-            plugins[0].jobEnd,
-            plugins[1].jobEnd,
-            plugins[2].jobEnd
-          );
-        });
-    });
+          plugins[0].jobEnd,
+          plugins[1].jobEnd,
+          plugins[2].jobEnd,
+        );
+      })
+    ));
 
     it('calls plugin methods with proper arguments', () => {
       const contexts = [
@@ -220,7 +220,7 @@ describe('lifecycle', () => {
         manager.contextFor(plugins[2], 'foo'),
       ];
 
-      lifecycle.processJob('foo', plugins, manager)
+      return lifecycle.processJob('foo', plugins, manager)
         .then(() => {
           sinon.assert.calledWith(plugins[0].jobStart, contexts[0]);
           sinon.assert.calledWith(plugins[1].jobStart, contexts[1]);
@@ -245,7 +245,7 @@ describe('lifecycle', () => {
     it('on an error, fails fast', () => {
       plugins[0].beforeRender = sinon.stub().throws();
 
-      lifecycle.processJob('foo', plugins, manager)
+      return lifecycle.processJob('foo', plugins, manager)
         .then(() => {
           sinon.assert.called(plugins[0].jobStart);
           sinon.assert.called(plugins[1].jobStart);
@@ -260,16 +260,15 @@ describe('lifecycle', () => {
     it('on an error, calls manager.recordError', () => {
       plugins[0].beforeRender = sinon.stub().throws();
 
-      lifecycle.processJob('foo', plugins, manager)
-        .then(() => {
-          sinon.assert.called(manager.recordError);
-        });
+      return lifecycle.processJob('foo', plugins, manager).then(() => {
+        sinon.assert.called(manager.recordError);
+      });
     });
 
     it('on an error, calls onError for plugins', () => {
       plugins[0].beforeRender = sinon.stub().throws();
 
-      lifecycle.processJob('foo', plugins, manager)
+      return lifecycle.processJob('foo', plugins, manager)
         .then(() => {
           sinon.assert.called(plugins[0].onError);
           sinon.assert.called(plugins[1].onError);
@@ -290,7 +289,7 @@ describe('lifecycle', () => {
       sinon.stub(manager, 'recordError');
     });
 
-    it('calls lifecycle methods in correct order', () => {
+    it('calls lifecycle methods in correct order', () => (
       lifecycle.processBatch(jobs, plugins, manager)
         .then(() => {
           sinon.assert.callOrder(
@@ -304,15 +303,15 @@ describe('lifecycle', () => {
 
             plugins[0].batchEnd,
             plugins[1].batchEnd,
-            plugins[2].batchEnd
+            plugins[2].batchEnd,
           );
-        });
-    });
+        })
+    ));
 
     it('on an error, fails fast', () => {
       plugins[0].batchStart = sinon.stub().throws();
 
-      lifecycle.processBatch(jobs, plugins, manager)
+      return lifecycle.processBatch(jobs, plugins, manager)
         .then(() => {
           sinon.assert.called(plugins[0].batchStart);
           sinon.assert.notCalled(manager.render);
@@ -323,7 +322,7 @@ describe('lifecycle', () => {
     it('on an error, calls manager.recordError', () => {
       plugins[0].batchStart = sinon.stub().throws();
 
-      lifecycle.processBatch(jobs, plugins, manager)
+      return lifecycle.processBatch(jobs, plugins, manager)
         .then(() => {
           sinon.assert.called(manager.recordError);
         });
@@ -332,7 +331,7 @@ describe('lifecycle', () => {
     it('on an error, calls onError for plugins', () => {
       plugins[0].batchStart = sinon.stub().throws();
 
-      lifecycle.processBatch(jobs, plugins, manager)
+      return lifecycle.processBatch(jobs, plugins, manager)
         .then(() => {
           sinon.assert.called(plugins[0].onError);
           sinon.assert.called(plugins[1].onError);

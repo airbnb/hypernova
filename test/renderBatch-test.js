@@ -12,7 +12,7 @@ class Response {
     return this;
   }
 
-  end() {}
+  end() {} // eslint-disable-line class-methods-use-this
 
   getResponse() {
     return {

@@ -1,12 +1,8 @@
 {
   "root": true,
-  "extends": "airbnb",
+  "extends": "airbnb-base",
   "env": {
-    "es6": true
-  },
-  "ecmaFeatures": {
-    "modules": true,
-    "jsx": true
+    "node": true
   },
   "rules": {
     "no-console": 0,

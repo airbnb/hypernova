@@ -106,7 +106,7 @@ class Module {
     }
 
     if (isNativeModule(filename)) {
-      // eslint-disable-next-line global-require
+      // eslint-disable-next-line global-require, import/no-dynamic-require
       return require(filename);
     }
 

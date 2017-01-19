@@ -25,7 +25,7 @@ function notFound(name) {
   error.stack = [stack[0]]
     .concat(
       `    at YOUR-COMPONENT-DID-NOT-REGISTER_${name}:1:1`,
-      stack.slice(1)
+      stack.slice(1),
     )
     .join('\n');
 
@@ -109,24 +109,22 @@ class BatchManager {
    * job token passed in).
    */
   getRequestContext(plugin, token) {
-    return Object.assign(
-      {},
-      this.baseContext,
-      this.jobContexts[token],
-      this.pluginContexts.get(plugin)
-    );
+    return {
+      ...this.baseContext,
+      ...this.jobContexts[token],
+      ...this.pluginContexts.get(plugin),
+    };
   }
 
   /**
    * Returns a context object scoped to a specific plugin and batch.
    */
   getBatchContext(plugin) {
-    return Object.assign(
-      {},
-      this.baseContext,
-      this.batchContext,
-      this.pluginContexts.get(plugin)
-    );
+    return {
+      ...this.baseContext,
+      ...this.batchContext,
+      ...this.pluginContexts.get(plugin),
+    };
   }
 
   contextFor(plugin, token) {
