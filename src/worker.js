@@ -92,6 +92,7 @@ const initServer = (app, config, callback) => {
   runAppLifecycle('initialize', config.plugins, config)
     .then(() => {
       server = app.listen(config.port, config.host, callback);
+      return null;
     })
     .catch(shutDownSequence);
 };
