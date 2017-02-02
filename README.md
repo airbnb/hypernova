@@ -78,9 +78,19 @@ If all goes well you should see a message that says "Connected". If there is an 
 
 If your server code is written in a language other than Ruby, then you can build your own client for Hypernova. A [spec](docs/client-spec.md) exists and details on how clients should function as well as fall-back in case of failure.
 
-```sh
-bundle install hypernova
+Add this line to your application’s Gemfile:
+
+```ruby
+gem 'hypernova'
 ```
+
+And then execute:
+
+    $ bundle
+
+Or install it yourself as:
+
+    $ gem install hypernova
 
 Now lets add support on the Rails side for Hypernova. First, we‘ll need to create an initializer.
 
