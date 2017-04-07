@@ -225,6 +225,9 @@ Options, and their defaults
   logger: {},
   // the port the app will start on
   port: 8080,
+  // function to return the number of cpus hypernova will use
+  // if not overridden, default will return the number of reported cpus  - 1
+  getCPUs: undefined,
   // default endpoint path
   endpoint: '/batch'
 }
@@ -265,6 +268,12 @@ hypernova({
   },
 });
 ```
+
+#### `getCPUs`
+
+This lets you specify the number of cores Hypernova will run workers on. Receives an argument containing the number of cores as reported by the OS.
+
+If this method is not overridden, or if a falsy value is passed, the default method will return the number of reported cores minus 1.
 
 ## API
 
