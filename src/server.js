@@ -34,6 +34,10 @@ export default function hypernova(userConfig, onServer) {
 
   const app = express();
 
+  if (typeof config.configureApp === 'function') {
+    config.configureApp(app);
+  }
+
   if (config.devMode) {
     worker(app, config, onServer);
   } else if (cluster.isMaster) {

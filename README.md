@@ -226,8 +226,10 @@ Options, and their defaults
   // the port the app will start on
   port: 8080,
   // whether or not to run in parallel using all available cpus
-  endpoint: '/batch'
+  endpoint: '/batch',
   // default endpoint path
+  configureApp: function(app) { },
+  // callback with express app instance, allowing to prepend custom middleware before Hypernova
 }
 ```
 
