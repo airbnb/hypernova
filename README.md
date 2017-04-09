@@ -225,9 +225,8 @@ Options, and their defaults
   logger: {},
   // the port the app will start on
   port: 8080,
-  // whether or not to run in parallel using all available cpus
-  endpoint: '/batch'
   // default endpoint path
+  endpoint: '/batch'
 }
 ```
 
