@@ -1,5 +1,7 @@
 # Hypernova
 
+[![Join the chat at https://gitter.im/airbnb/hypernova](https://badges.gitter.im/airbnb/hypernova.svg)](https://gitter.im/airbnb/hypernova?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 > A service for server-side rendering your JavaScript views
 
 [![Join the chat at https://gitter.im/airbnb/hypernova](https://badges.gitter.im/airbnb/hypernova.svg)](https://gitter.im/airbnb/hypernova?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
