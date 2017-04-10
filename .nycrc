@@ -1,0 +1,17 @@
+{
+  "lines": 90,
+  "functions": 55,
+  "branches": 66,
+  "statements": 91,
+  "reporter": [
+    "html",
+    "text-summary"
+  ],
+  "require": [
+    "babel-register"
+  ],
+  "exclude": [
+    "test"
+  ],
+  "check-coverage": true
+ }
