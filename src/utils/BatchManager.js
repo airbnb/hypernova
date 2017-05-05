@@ -152,7 +152,7 @@ class BatchManager {
         return Promise.reject(notFound(name));
       }
 
-      return Promise.resolve(renderFn(context.props));
+      return renderFn(context.props);
     })
     .then((html) => {
       context.html = html;
