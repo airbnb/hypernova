@@ -4,7 +4,7 @@
   "description": "A service for server-side rendering your JavaScript views",
   "main": "lib/index.js",
   "scripts": {
-    "prepublish": "npm run build",
+    "prepublish": "not-in-publish || npm run build",
     "build": "rimraf lib && babel src -d lib",
     "lint": "eslint src test",
     "pretest": "npm run --silent lint",
@@ -58,6 +58,7 @@
     "eslint": "^3.19.0",
     "eslint-config-airbnb-base": "^11.2.0",
     "eslint-plugin-import": "^2.2.0",
+    "in-publish": "^2.0.0",
     "istanbul": "^1.0.0-alpha.2",
     "mocha": "^3.4.1",
     "mocha-wrap": "^2.1.1",
