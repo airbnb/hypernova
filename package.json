@@ -4,7 +4,7 @@
   "description": "A service for server-side rendering your JavaScript views",
   "main": "lib/index.js",
   "scripts": {
-    "prepublish": "not-in-publish || npm run build",
+    "prepublish": "not-in-publish || safe-publish-latest && npm run build",
     "build": "rimraf lib && babel src -d lib",
     "lint": "eslint src test",
     "pretest": "npm run --silent lint",
@@ -63,6 +63,7 @@
     "mocha": "^3.4.1",
     "mocha-wrap": "^2.1.1",
     "rimraf": "^2.6.1",
+    "safe-publish-latest": "^1.1.1",
     "sinon": "^1.17.7",
     "sinon-sandbox": "^1.0.2"
   },
