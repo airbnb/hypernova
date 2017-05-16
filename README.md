@@ -221,13 +221,14 @@ Options, and their defaults
   devMode: false,
   // how components will be retrieved,
   getComponent: undefined,
+  // if not overridden, default will return the number of reported cpus  - 1
+  getCPUs: undefined,
+  // the host the app will bind to
+  host: '0.0.0.0',
   // configure the logger
   logger: {},
   // the port the app will start on
   port: 8080,
-  // function to return the number of cpus hypernova will use
-  // if not overridden, default will return the number of reported cpus  - 1
-  getCPUs: undefined,
   // default endpoint path
   endpoint: '/batch'
 }

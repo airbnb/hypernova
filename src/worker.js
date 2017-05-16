@@ -91,7 +91,7 @@ const initServer = (app, config, callback) => {
    // run through the initialize methods of any plugins that define them
   runAppLifecycle('initialize', config.plugins, config)
     .then(() => {
-      server = app.listen(config.port, callback);
+      server = app.listen(config.port, config.host, callback);
     })
     .catch(shutDownSequence);
 };
