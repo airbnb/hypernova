@@ -35,15 +35,6 @@
     "Ian Myers <ian.myers@airbnb.com>",
     "Jake Teton-Landis <jake.tl@airbnb.com>"
   ],
-  "files": [
-    "README.md",
-    "lib",
-    "src",
-    "server.js",
-    "test",
-    ".eslintrc",
-    ".babelrc"
-  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/airbnb/hypernova/issues"
