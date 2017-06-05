@@ -5,6 +5,13 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [2.1.0] - 2017-06-05
+
+### Changed
+
+- You may not return a Promise from the top-level render function.
+
+
 ## [2.0.0] - 2016-09-15
 
 ### Breaking Changes
