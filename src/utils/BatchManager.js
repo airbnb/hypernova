@@ -149,22 +149,18 @@ class BatchManager {
       if (!renderFn || typeof renderFn !== 'function') {
         // component not registered
         context.statusCode = 404;
-        context.duration = msSince(start);
-        throw notFound(name);
+        return Promise.reject(notFound(name));
       }
 
-      let response = null;
-
-      // render the component!
-      try {
-        context.html = renderFn(context.props);
-      } catch (e) {
-        response = Promise.reject(e);
-      } finally {
-        context.duration = msSince(start);
-      }
-
-      return response;
+      return renderFn(context.props);
+    })
+    .then((html) => {
+      context.html = html;
+      context.duration = msSince(start);
+    })
+    .catch((err) => {
+      context.duration = msSince(start);
+      return Promise.reject(err);
     });
   }
 
