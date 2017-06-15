@@ -5,7 +5,29 @@ import './environment';
 import logger from './utils/logger';
 import { raceTo } from './utils/lifecycle';
 
-const WORKER_COUNT = os.cpus().length - 1 || 1;
+export function getDefaultCPUs(realCount) {
+  if (!Number.isInteger(realCount) || realCount <= 0) {
+    throw new TypeError('getDefaultCPUs must accept a positive integer');
+  }
+
+  return realCount - 1 || 1;
+}
+
+export function getWorkerCount(getCPUs = getDefaultCPUs) {
+  const realCount = os.cpus().length;
+
+  if (typeof getCPUs !== 'function') {
+    throw new TypeError('getCPUs must be a function');
+  }
+
+  const requested = getCPUs(realCount);
+
+  if (!Number.isInteger(requested) || requested <= 0) {
+    throw new TypeError('getCPUs must return a positive integer');
+  }
+
+  return requested;
+}
 
 function close() {
   return Promise.all(Object.values(cluster.workers).map((worker) => {
@@ -24,22 +46,24 @@ function shutdown() {
   return raceTo(close(), 5000, 'Closing the coordinator took too long.');
 }
 
-function workersReady() {
+function workersReady(workerCount) {
   const workers = Object.values(cluster.workers);
 
   return (
-    workers.length === WORKER_COUNT &&
+    workers.length === workerCount &&
     workers.every(worker => worker.isReady)
   );
 }
 
-export default () => {
+export default (getCPUs) => {
+  const workerCount = getWorkerCount(getCPUs);
+
   function onWorkerMessage(msg) {
     if (msg.ready) {
       cluster.workers[msg.workerId].isReady = true;
     }
 
-    if (workersReady()) {
+    if (workersReady(workerCount)) {
       Object.values(cluster.workers).forEach(worker => worker.send('healthy'));
     }
   }
@@ -73,7 +97,7 @@ export default () => {
     shutdown().then(() => process.exit(0), () => process.exit(1));
   });
 
-  Array.from({ length: WORKER_COUNT }, () => cluster.fork());
+  Array.from({ length: workerCount }, () => cluster.fork());
 
   Object.values(cluster.workers).forEach(worker => worker.on('message', onWorkerMessage));
 };

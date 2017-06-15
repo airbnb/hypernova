@@ -37,7 +37,7 @@ export default function hypernova(userConfig, onServer) {
   if (config.devMode) {
     worker(app, config, onServer);
   } else if (cluster.isMaster) {
-    coordinator();
+    coordinator(config.getCPUs);
   } else {
     worker(app, config, onServer, cluster.worker.id);
   }
