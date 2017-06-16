@@ -1,6 +1,6 @@
 {
   "name": "hypernova",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "A service for server-side rendering your JavaScript views",
   "main": "lib/index.js",
   "scripts": {
