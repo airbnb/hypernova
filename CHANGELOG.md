@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.1.3] - 2017-06-16
+
+### Added
+
+- Number of CPUs is now configurable.
+- Host is configurable.
+
+
 ## [2.1.1] - 2017-06-15
 
 ### Changed
