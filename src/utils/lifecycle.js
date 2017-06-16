@@ -163,7 +163,7 @@ export function processJob(token, plugins, manager) {
       // afterRender
       runLifecycleSync('afterRender', plugins, manager, token);
 
-      runLifecycle('jobEnd', plugins, manager, token);
+      return runLifecycle('jobEnd', plugins, manager, token);
     })
     .catch((err) => {
       manager.recordError(err, token);
@@ -194,9 +194,7 @@ export function processBatch(jobs, plugins, manager) {
     ))
 
     // batchEnd
-    .then(() => {
-      runLifecycle('batchEnd', plugins, manager);
-    })
+    .then(() => runLifecycle('batchEnd', plugins, manager))
     .catch((err) => {
       manager.recordError(err);
       errorSync(err, plugins, manager);
