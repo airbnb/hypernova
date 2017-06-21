@@ -8,11 +8,16 @@ import BatchManager from './utils/BatchManager';
 
 let closing = false;
 
+const healthCheckEndpoint = '/';
+
 const attachMiddleware = (app, config) => {
   app.use(bodyParser.json(config.bodyParser));
 };
 
 const attachEndpoint = (app, config, callback) => {
+  app.get(healthCheckEndpoint, function (req, res) {
+    res.send('It works!\n');
+  });
   app.post(config.endpoint, renderBatch(config, callback));
 };
 
