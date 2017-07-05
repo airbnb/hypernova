@@ -5,13 +5,13 @@
   "main": "lib/index.js",
   "scripts": {
     "prepublish": "not-in-publish || safe-publish-latest && npm run build",
-    "build": "rimraf lib && babel src -d lib",
+    "build": "rimraf lib && babel --source-maps inline src -d lib",
     "lint": "eslint src test",
     "pretest": "npm run --silent lint",
     "test": "npm run build && npm run test:coverage && npm run --silent cover:check",
     "tests-only": "npm run build && npm run test:quick",
-    "test:coverage": "babel-node node_modules/.bin/istanbul cover --report html node_modules/.bin/_mocha -- -R tap test/init.js test/*-test.js",
-    "cover:check": "istanbul check-coverage && echo code coverage thresholds met, achievement unlocked!",
+    "test:coverage": "nyc --silent node_modules/.bin/mocha -R tap test/init.js test/*-test.js",
+    "cover:check": "nyc report && echo code coverage thresholds met, achievement unlocked!",
     "test:quick": "babel-node node_modules/.bin/_mocha -R tap test/init.js test/*-test.js"
   },
   "repository": {
@@ -50,11 +50,11 @@
     "eslint-config-airbnb-base": "^11.2.0",
     "eslint-plugin-import": "^2.2.0",
     "in-publish": "^2.0.0",
-    "istanbul": "^1.0.0-alpha.2",
     "mocha": "^3.4.1",
     "mocha-wrap": "^2.1.1",
     "rimraf": "^2.6.1",
     "safe-publish-latest": "^1.1.1",
+    "nyc": "^10.3.2",
     "sinon": "^1.17.7",
     "sinon-sandbox": "^1.0.2"
   },
