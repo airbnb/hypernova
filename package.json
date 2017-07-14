@@ -59,14 +59,14 @@
     "sinon-sandbox": "^1.0.2"
   },
   "dependencies": {
-    "airbnb-js-shims": "^1.0.1",
-    "bluebird": "^3.4.6",
-    "body-parser": "^1.15.2",
-    "express": "^4.14.0",
-    "glob": "^7.0.6",
+    "airbnb-js-shims": "^1.1.1",
+    "bluebird": "^3.5.0",
+    "body-parser": "^1.17.2",
+    "express": "^4.15.3",
+    "glob": "^7.1.2",
     "has": "^1.0.1",
-    "lru-cache": "^4.0.1",
-    "winston": "^2.2.0"
+    "lru-cache": "^4.1.1",
+    "winston": "^2.3.1"
   },
   "engines": {
     "node": ">= 0.10"
