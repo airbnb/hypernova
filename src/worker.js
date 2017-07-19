@@ -16,9 +16,9 @@ const attachEndpoint = (app, config, callback) => {
   app.post(config.endpoint, renderBatch(config, callback));
 };
 
+
 const initServer = (app, config, callback) => {
   let server;
-
   function exit(code) {
     return () => process.exit(code);
   }
@@ -52,6 +52,10 @@ const initServer = (app, config, callback) => {
       .then(() => runAppLifecycle('shutDown', config.plugins, config, error, req))
       .then(exit(code))
       .catch(exit(code));
+  }
+
+  function readyToClose(getClose) {
+    getClose(shutDownSequence);
   }
 
   function errorHandler(err, req, res, next) { // eslint-disable-line no-unused-vars
@@ -91,7 +95,10 @@ const initServer = (app, config, callback) => {
    // run through the initialize methods of any plugins that define them
   runAppLifecycle('initialize', config.plugins, config)
     .then(() => {
-      server = app.listen(config.port, config.host, callback);
+      server = app.listen(config.port, config.host, () => {
+        callback();
+        readyToClose(config.getClose);
+      });
       return null;
     })
     .catch(shutDownSequence);

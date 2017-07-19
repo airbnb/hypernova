@@ -7,7 +7,37 @@ describe('Hypernova server', () => {
     assert.throws(hypernova, TypeError);
   });
 
-  it('starts up the hypernova server without blowing up', () => {
-    hypernova({ devMode: true, getComponent: () => {} });
+  it('starts up the hypernova server without blowing up', (done) => {
+    hypernova({
+      devMode: true,
+      getComponent: () => {},
+      plugins: [
+        {
+          shutDown: () => {
+            done();
+          },
+        },
+      ],
+      getClose: (close) => {
+        close(null, null, 0);
+      },
+    });
+  });
+
+  it('starts up the hypernova server again without blowing up', (done) => {
+    hypernova({
+      devMode: true,
+      getComponent: () => {},
+      plugins: [
+        {
+          shutDown: () => {
+            done();
+          },
+        },
+      ],
+      getClose: (close) => {
+        close(null, null, 0);
+      },
+    });
   });
 });

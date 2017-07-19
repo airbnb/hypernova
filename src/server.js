@@ -31,7 +31,10 @@ export default function hypernova(userConfig, onServer) {
     throw new TypeError('Hypernova requires a `getComponent` property and it must be a function');
   }
 
-  logger.init(config.logger);
+  // don't initialize logger if it has already been initialized
+  if (logger.init) {
+    logger.init(config.logger);
+  }
 
   const app = express();
 
