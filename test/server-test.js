@@ -1,8 +1,20 @@
 import { assert } from 'chai';
+import sinon from 'sinon';
 
 import hypernova from '../server';
 
 describe('Hypernova server', () => {
+  let sandbox;
+
+  beforeEach(() => {
+    sandbox = sinon.sandbox.create();
+    sandbox.stub(process, 'exit');
+  });
+
+  afterEach(() => {
+    sandbox.restore();
+  });
+
   it('blows up if hypernova does not get getComponent', () => {
     assert.throws(hypernova, TypeError);
   });
