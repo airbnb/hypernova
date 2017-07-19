@@ -22,6 +22,7 @@ const defaultConfig = {
   plugins: [],
   port: 8080,
   host: '0.0.0.0',
+  getClose: () => {},
 };
 
 export default function hypernova(userConfig, onServer) {
