@@ -189,8 +189,7 @@ describe('lifecycle', () => {
     });
 
     it('calls lifecycle methods in correct order', () => (
-      lifecycle.processJob('foo', plugins, manager)
-      .then(() => {
+      lifecycle.processJob('foo', plugins, manager).then(() => {
         sinon.assert.callOrder(
           plugins[0].jobStart,
           plugins[1].jobStart,
@@ -220,26 +219,25 @@ describe('lifecycle', () => {
         manager.contextFor(plugins[2], 'foo'),
       ];
 
-      return lifecycle.processJob('foo', plugins, manager)
-        .then(() => {
-          sinon.assert.calledWith(plugins[0].jobStart, contexts[0]);
-          sinon.assert.calledWith(plugins[1].jobStart, contexts[1]);
-          sinon.assert.calledWith(plugins[2].jobStart, contexts[2]);
+      return lifecycle.processJob('foo', plugins, manager).then(() => {
+        sinon.assert.calledWith(plugins[0].jobStart, contexts[0]);
+        sinon.assert.calledWith(plugins[1].jobStart, contexts[1]);
+        sinon.assert.calledWith(plugins[2].jobStart, contexts[2]);
 
-          sinon.assert.calledWith(plugins[0].beforeRender, contexts[0]);
-          sinon.assert.calledWith(plugins[1].beforeRender, contexts[1]);
-          sinon.assert.calledWith(plugins[2].beforeRender, contexts[2]);
+        sinon.assert.calledWith(plugins[0].beforeRender, contexts[0]);
+        sinon.assert.calledWith(plugins[1].beforeRender, contexts[1]);
+        sinon.assert.calledWith(plugins[2].beforeRender, contexts[2]);
 
-          sinon.assert.calledWith(manager.render, 'foo');
+        sinon.assert.calledWith(manager.render, 'foo');
 
-          sinon.assert.calledWith(plugins[0].afterRender, contexts[0]);
-          sinon.assert.calledWith(plugins[1].afterRender, contexts[1]);
-          sinon.assert.calledWith(plugins[2].afterRender, contexts[2]);
+        sinon.assert.calledWith(plugins[0].afterRender, contexts[0]);
+        sinon.assert.calledWith(plugins[1].afterRender, contexts[1]);
+        sinon.assert.calledWith(plugins[2].afterRender, contexts[2]);
 
-          sinon.assert.calledWith(plugins[0].jobEnd, contexts[0]);
-          sinon.assert.calledWith(plugins[1].jobEnd, contexts[1]);
-          sinon.assert.calledWith(plugins[2].jobEnd, contexts[2]);
-        });
+        sinon.assert.calledWith(plugins[0].jobEnd, contexts[0]);
+        sinon.assert.calledWith(plugins[1].jobEnd, contexts[1]);
+        sinon.assert.calledWith(plugins[2].jobEnd, contexts[2]);
+      });
     });
 
     it('on an error, fails fast', () => {

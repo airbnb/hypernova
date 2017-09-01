@@ -3,6 +3,7 @@
     "mocha": true
   },
   "rules": {
+    "indent": 1,
     "import/no-extraneous-dependencies": [2, {
       "devDependencies": true
     }],

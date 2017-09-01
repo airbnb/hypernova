@@ -153,12 +153,10 @@ class BatchManager {
       }
 
       return renderFn(context.props);
-    })
-    .then((html) => {
+    }).then((html) => {
       context.html = html;
       context.duration = msSince(start);
-    })
-    .catch((err) => {
+    }).catch((err) => {
       context.duration = msSince(start);
       return Promise.reject(err);
     });

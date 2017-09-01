@@ -151,24 +151,24 @@ export function processJob(token, plugins, manager) {
     // jobStart
     runLifecycle('jobStart', plugins, manager, token)
 
-    .then(() => {
-      // beforeRender
-      runLifecycleSync('beforeRender', plugins, manager, token);
+      .then(() => {
+        // beforeRender
+        runLifecycleSync('beforeRender', plugins, manager, token);
 
-      // render
-      return manager.render(token);
-    })
-    // jobEnd
-    .then(() => {
-      // afterRender
-      runLifecycleSync('afterRender', plugins, manager, token);
+        // render
+        return manager.render(token);
+      })
+      // jobEnd
+      .then(() => {
+        // afterRender
+        runLifecycleSync('afterRender', plugins, manager, token);
 
-      return runLifecycle('jobEnd', plugins, manager, token);
-    })
-    .catch((err) => {
-      manager.recordError(err, token);
-      errorSync(err, plugins, manager, token);
-    })
+        return runLifecycle('jobEnd', plugins, manager, token);
+      })
+      .catch((err) => {
+        manager.recordError(err, token);
+        errorSync(err, plugins, manager, token);
+      })
   );
 }
 
@@ -188,16 +188,16 @@ export function processBatch(jobs, plugins, manager) {
     // batchStart
     runLifecycle('batchStart', plugins, manager)
 
-    // for each job, processJob
-    .then(() => Promise.all(
-      Object.keys(jobs).map(token => processJob(token, plugins, manager)),
-    ))
+      // for each job, processJob
+      .then(() => Promise.all(
+        Object.keys(jobs).map(token => processJob(token, plugins, manager)),
+      ))
 
-    // batchEnd
-    .then(() => runLifecycle('batchEnd', plugins, manager))
-    .catch((err) => {
-      manager.recordError(err);
-      errorSync(err, plugins, manager);
-    })
+      // batchEnd
+      .then(() => runLifecycle('batchEnd', plugins, manager))
+      .catch((err) => {
+        manager.recordError(err);
+        errorSync(err, plugins, manager);
+      })
   );
 }
