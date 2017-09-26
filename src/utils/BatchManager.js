@@ -138,7 +138,7 @@ class BatchManager {
   render(token) {
     const start = now();
     const context = this.jobContexts[token];
-    const name = context.name;
+    const { name } = context;
 
     const { getComponent } = this.config;
 

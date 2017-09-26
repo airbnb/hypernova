@@ -4,8 +4,6 @@
   },
   "rules": {
     "indent": 1,
-    "import/no-extraneous-dependencies": [2, {
-      "devDependencies": true
-    }],
+    "prefer-promise-reject-errors": 0,
   }
 }

@@ -5,7 +5,9 @@
     "node": true
   },
   "rules": {
+    "function-paren-newline": 0,
     "no-console": 0,
-    "no-underscore-dangle": 1
+    "no-underscore-dangle": 1,
+    "object-curly-newline": 0,
   }
 }
