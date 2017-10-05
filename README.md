@@ -217,7 +217,7 @@ Options, and their defaults
   bodyParser: {
     limit: 1024 * 1000,
   },
-  // disables cluster mode and reloads each component every time it is requested
+  // runs on a single process
   devMode: false,
   // how components will be retrieved,
   getComponent: undefined,
