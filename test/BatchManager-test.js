@@ -21,6 +21,10 @@ function mockPlugin() {
 const jobs = {
   foo: makeJob(),
   bar: makeJob(),
+  baz: {
+    name: 'baz',
+    data: {},
+  },
 };
 
 jobs.bar.name = 'bar'; // component not registered
@@ -29,6 +33,7 @@ const req = {};
 const res = {};
 const _strategies = {
   [COMPONENT_NAME]: sinon.stub().returns('html'),
+  baz: sinon.stub().returns(undefined),
 };
 const config = {
   getComponent(name) {
@@ -91,6 +96,16 @@ describe('BatchManager', () => {
     it('fails if component is not registered', (done) => {
       manager.render('bar').catch((err) => {
         assert.equal(err.message, 'Component "bar" not registered');
+        done();
+      });
+    });
+
+    it('fails when a component returns falsy html', (done) => {
+      manager.render('baz').catch((err) => {
+        assert.equal(
+          err.message,
+          'HTML was not returned to Hypernova, this is most likely an error within your application. Check your logs for any uncaught errors and/or rejections.',
+        );
         done();
       });
     });
