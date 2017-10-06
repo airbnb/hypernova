@@ -1,3 +1,9 @@
+const noHTMLError = new TypeError(
+  'HTML was not returned to Hypernova, this is most likely an error within your application. ' +
+  'Check your logs for any uncaught errors and/or rejections.',
+);
+noHTMLError.stack = null;
+
 function errorToSerializable(error) {
   // istanbul ignore next
   if (error === undefined) throw new TypeError('No error was passed');
@@ -153,7 +159,10 @@ class BatchManager {
       }
 
       return renderFn(context.props);
-    }).then((html) => {
+    }).then((html) => { // eslint-disable-line consistent-return
+      if (!html) {
+        return Promise.reject(noHTMLError);
+      }
       context.html = html;
       context.duration = msSince(start);
     }).catch((err) => {
