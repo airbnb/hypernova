@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.2.0] - 2017-10-06
+
+### Changed
+
+- If no HTML is returned from the render function then Hypernova will reject the Promise.
+
 ## [2.1.3] - 2017-06-16
 
 ### Added
