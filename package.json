@@ -51,7 +51,7 @@
     "babel-preset-airbnb": "^2.4.0",
     "chai": "^4.1.2",
     "cheerio": "^1.0.0-rc.2",
-    "eslint": "^4.10.0",
+    "eslint": "^4.15.0",
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-plugin-import": "^2.8.0",
     "in-publish": "^2.0.0",
@@ -75,5 +75,11 @@
   },
   "engines": {
     "node": ">= 0.10"
+  },
+  "greenkeeper": {
+    "ignore": [
+      "mocha",
+      "sinon"
+    ]
   }
 }
