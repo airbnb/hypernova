@@ -10,14 +10,18 @@ const OPTIONS = {
 };
 
 const loggerInterface = {
-  init(config) {
-    const options = { ...OPTIONS, ...config };
+  init(config, loggerInstance) {
+    if (loggerInstance) {
+      logger = loggerInstance;
+    } else {
+      const options = { ...OPTIONS, ...config };
 
-    logger = new winston.Logger({
-      transports: [
-        new winston.transports.Console(options),
-      ],
-    });
+      logger = new winston.Logger({
+        transports: [
+          new winston.transports.Console(options),
+        ],
+      });
+    }
 
     delete loggerInterface.init;
   },
