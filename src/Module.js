@@ -10,7 +10,7 @@ const NativeModules = process.binding('natives');
 // this is cool since we can now have different extensions for VM than for where your program is
 // running.
 // If you want to add an extension then you can use addExtension defined and exported below.
-const moduleExtensions = Object.assign({}, NativeModule._extensions);
+const moduleExtensions = { ...NativeModule._extensions };
 
 function isNativeModule(id) {
   return has(NativeModules, id);

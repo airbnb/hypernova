@@ -25,7 +25,7 @@ const defaultConfig = {
 };
 
 export default function hypernova(userConfig, onServer) {
-  const config = Object.assign({}, defaultConfig, userConfig);
+  const config = { ...defaultConfig, ...userConfig };
 
   if (typeof config.getComponent !== 'function') {
     throw new TypeError('Hypernova requires a `getComponent` property and it must be a function');

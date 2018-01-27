@@ -11,7 +11,7 @@ const OPTIONS = {
 
 const loggerInterface = {
   init(config) {
-    const options = Object.assign({}, OPTIONS, config);
+    const options = { ...OPTIONS, ...config };
 
     logger = new winston.Logger({
       transports: [

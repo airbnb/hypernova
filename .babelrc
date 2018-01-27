@@ -1,6 +1,7 @@
 {
   "presets": ["airbnb"],
   "plugins": [
-    "add-module-exports"
+    "add-module-exports",
+    ["transform-replace-object-assign", "object.assign"],
   ]
 }

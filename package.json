@@ -48,6 +48,7 @@
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-plugin-transform-replace-object-assign": "^0.2.1",
     "babel-preset-airbnb": "^2.4.0",
     "chai": "^4.1.2",
     "cheerio": "^1.0.0-rc.2",
@@ -71,6 +72,7 @@
     "glob": "^7.1.2",
     "has": "^1.0.1",
     "lru-cache": "^4.1.1",
+    "object.assign": "^4.1.0",
     "winston": "^2.4.0"
   },
   "engines": {
