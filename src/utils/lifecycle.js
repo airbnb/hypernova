@@ -189,8 +189,9 @@ export function processBatch(jobs, plugins, manager) {
     runLifecycle('batchStart', plugins, manager)
 
       // for each job, processJob
-      .then(() => Promise.all(
-        Object.keys(jobs).map(token => processJob(token, plugins, manager)),
+      .then(() => Object.keys(jobs).reduce(
+        (chain, token) => chain.then(() => processJob(token, plugins, manager)),
+        Promise.resolve(),
       ))
 
       // batchEnd
