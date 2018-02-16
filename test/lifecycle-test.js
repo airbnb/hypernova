@@ -287,54 +287,58 @@ describe('lifecycle', () => {
       sinon.stub(manager, 'recordError');
     });
 
-    it('calls lifecycle methods in correct order', () => (
-      lifecycle.processBatch(jobs, plugins, manager)
-        .then(() => {
-          sinon.assert.callOrder(
-            plugins[0].batchStart,
-            plugins[1].batchStart,
-            plugins[2].batchStart,
+    [true, false].forEach((concurrent) => {
+      describe(`when concurrent is ${concurrent}`, () => {
+        it('calls lifecycle methods in correct order', () => (
+          lifecycle.processBatch(jobs, plugins, manager, concurrent)
+            .then(() => {
+              sinon.assert.callOrder(
+                plugins[0].batchStart,
+                plugins[1].batchStart,
+                plugins[2].batchStart,
 
-            // gets called once for each job
-            manager.render,
-            manager.render,
+                // gets called once for each job
+                manager.render,
+                manager.render,
 
-            plugins[0].batchEnd,
-            plugins[1].batchEnd,
-            plugins[2].batchEnd,
-          );
-        })
-    ));
+                plugins[0].batchEnd,
+                plugins[1].batchEnd,
+                plugins[2].batchEnd,
+              );
+            })
+        ));
 
-    it('on an error, fails fast', () => {
-      plugins[0].batchStart = sinon.stub().throws();
+        it('on an error, fails fast', () => {
+          plugins[0].batchStart = sinon.stub().throws();
 
-      return lifecycle.processBatch(jobs, plugins, manager)
-        .then(() => {
-          sinon.assert.called(plugins[0].batchStart);
-          sinon.assert.notCalled(manager.render);
-          sinon.assert.notCalled(plugins[0].batchEnd);
+          return lifecycle.processBatch(jobs, plugins, manager, concurrent)
+            .then(() => {
+              sinon.assert.called(plugins[0].batchStart);
+              sinon.assert.notCalled(manager.render);
+              sinon.assert.notCalled(plugins[0].batchEnd);
+            });
         });
-    });
 
-    it('on an error, calls manager.recordError', () => {
-      plugins[0].batchStart = sinon.stub().throws();
+        it('on an error, calls manager.recordError', () => {
+          plugins[0].batchStart = sinon.stub().throws();
 
-      return lifecycle.processBatch(jobs, plugins, manager)
-        .then(() => {
-          sinon.assert.called(manager.recordError);
+          return lifecycle.processBatch(jobs, plugins, manager, concurrent)
+            .then(() => {
+              sinon.assert.called(manager.recordError);
+            });
         });
-    });
 
-    it('on an error, calls onError for plugins', () => {
-      plugins[0].batchStart = sinon.stub().throws();
+        it('on an error, calls onError for plugins', () => {
+          plugins[0].batchStart = sinon.stub().throws();
 
-      return lifecycle.processBatch(jobs, plugins, manager)
-        .then(() => {
-          sinon.assert.called(plugins[0].onError);
-          sinon.assert.called(plugins[1].onError);
-          sinon.assert.called(plugins[2].onError);
+          return lifecycle.processBatch(jobs, plugins, manager, concurrent)
+            .then(() => {
+              sinon.assert.called(plugins[0].onError);
+              sinon.assert.called(plugins[1].onError);
+              sinon.assert.called(plugins[2].onError);
+            });
         });
+      });
     });
   });
 });

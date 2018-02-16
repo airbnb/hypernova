@@ -172,6 +172,19 @@ export function processJob(token, plugins, manager) {
   );
 }
 
+function processJobsSerially(jobs, plugins, manager) {
+  return Object.keys(jobs).reduce(
+    (chain, token) => chain.then(() => processJob(token, plugins, manager)),
+    Promise.resolve(),
+  );
+}
+
+function processJobsConcurrently(jobs, plugins, manager) {
+  return Promise.all(
+    Object.keys(jobs).map(token => processJob(token, plugins, manager)),
+  );
+}
+
 /**
  * Runs through the batch-level lifecycle events of a batch. This includes the processing of each
  * individual job.
@@ -183,16 +196,19 @@ export function processJob(token, plugins, manager) {
  * @param {BatchManager} manager
  * @returns {Promise}
  */
-export function processBatch(jobs, plugins, manager) {
+export function processBatch(jobs, plugins, manager, concurrent) {
   return (
     // batchStart
     runLifecycle('batchStart', plugins, manager)
 
       // for each job, processJob
-      .then(() => Object.keys(jobs).reduce(
-        (chain, token) => chain.then(() => processJob(token, plugins, manager)),
-        Promise.resolve(),
-      ))
+      .then(() => {
+        if (concurrent) {
+          return processJobsConcurrently(jobs, plugins, manager);
+        }
+
+        return processJobsSerially(jobs, plugins, manager);
+      })
 
       // batchEnd
       .then(() => runLifecycle('batchEnd', plugins, manager))
