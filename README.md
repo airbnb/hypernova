@@ -230,7 +230,9 @@ Options, and their defaults
   // the port the app will start on
   port: 8080,
   // default endpoint path
-  endpoint: '/batch'
+  endpoint: '/batch',
+  // default close callback
+  getClose: () => {},
 }
 ```
 
