@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.2.2] - 2018-02-26
+
+### Added
+
+- Option to execute jobs in a batch serially, rather than concurrently
+
+## [2.2.1] - 2018-02-26
+
+Bit of a flub with dist-tags, skipped version
+
 ## [2.2.0] - 2017-10-06
 
 ### Changed
