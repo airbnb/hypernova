@@ -230,7 +230,9 @@ Options, and their defaults
   // the port the app will start on
   port: 8080,
   // default endpoint path
-  endpoint: '/batch'
+  endpoint: '/batch',
+  // whether jobs in a batch are processed concurrently
+  processJobsConcurrently: true,
 }
 ```
 
@@ -275,6 +277,10 @@ hypernova({
 This lets you specify the number of cores Hypernova will run workers on. Receives an argument containing the number of cores as reported by the OS.
 
 If this method is not overridden, or if a falsy value is passed, the default method will return the number of reported cores minus 1.
+
+#### `processJobsConcurrently`
+
+This determines whether jobs in a batch are processed concurrently or serially.  Serial execution is preferable if you use a renderer that is CPU bound and your plugins do not perform IO in the per job hooks.
 
 ## API
 

@@ -11,7 +11,7 @@ export default (config, isClosing) => (req, res) => {
 
   const manager = new BatchManager(req, res, jobs, config);
 
-  return processBatch(jobs, config.plugins, manager)
+  return processBatch(jobs, config.plugins, manager, config.processJobsConcurrently)
     .then(() => {
       // istanbul ignore if
       if (isClosing()) {
