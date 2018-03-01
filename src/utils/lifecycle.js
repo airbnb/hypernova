@@ -24,13 +24,22 @@ export function hasMethod(name) {
  * @returns {Promise}
  */
 export function raceTo(promise, ms, msg) {
+  let timeout;
+
   return Promise.race([
     promise,
-    new Promise(resolve => setTimeout(() => resolve(PROMISE_TIMEOUT), ms)),
+    new Promise((resolve) => {
+      timeout = setTimeout(() => resolve(PROMISE_TIMEOUT), ms);
+    }),
   ]).then((res) => {
     if (res === PROMISE_TIMEOUT) logger.info(msg, { timeout: ms });
+    if (timeout) clearTimeout(timeout);
 
     return res;
+  }).catch((err) => {
+    if (timeout) clearTimeout(timeout);
+
+    return Promise.reject(err);
   });
 }
 
