@@ -10,6 +10,7 @@ import loadModules from './loadModules';
 import logger from './utils/logger';
 import createVM from './createVM';
 import worker from './worker';
+import { raceTo } from './utils/lifecycle';
 
 const defaultConfig = {
   bodyParser: {
@@ -55,3 +56,7 @@ hypernova.createGetComponent = createGetComponent;
 hypernova.createVM = createVM;
 hypernova.getFiles = getFiles;
 hypernova.loadModules = loadModules;
+hypernova.worker = worker;
+hypernova.logger = logger;
+hypernova.defaultConfig = defaultConfig;
+hypernova.raceTo = raceTo;
