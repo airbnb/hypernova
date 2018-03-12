@@ -24,6 +24,7 @@ const defaultConfig = {
   port: 8080,
   host: '0.0.0.0',
   processJobsConcurrent: true,
+  listenArgs: null,
 };
 
 export default function hypernova(userConfig, onServer) {
@@ -31,6 +32,10 @@ export default function hypernova(userConfig, onServer) {
 
   if (typeof config.getComponent !== 'function') {
     throw new TypeError('Hypernova requires a `getComponent` property and it must be a function');
+  }
+
+  if (!config.listenArgs) {
+    config.listenArgs = [config.port, config.host];
   }
 
   logger.init(config.logger);

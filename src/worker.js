@@ -88,7 +88,7 @@ class Server {
     // run through the initialize methods of any plugins that define them
     runAppLifecycle('initialize', this.config.plugins, this.config)
       .then(() => {
-        this.server = this.app.listen(this.config.port, this.config.host, this.callback);
+        this.server = this.app.listen(...this.config.listenArgs, this.callback);
         return null;
       })
       .catch(this.shutDownSequence);
