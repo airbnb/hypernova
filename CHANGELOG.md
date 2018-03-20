@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.2.4] = 2018-03-20
+
+### Changed
+
+- Refactor server/worker configuration into smaller pieces to be exported
+
 ## [2.2.3] - 2018-03-01
 
 ### Changed
