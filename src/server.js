@@ -27,6 +27,10 @@ const defaultConfig = {
   listenArgs: null,
 };
 
+function createApplication() {
+  return express();
+}
+
 export default function hypernova(userConfig, onServer) {
   const config = { ...defaultConfig, ...userConfig };
 
@@ -40,7 +44,7 @@ export default function hypernova(userConfig, onServer) {
 
   logger.init(config.logger);
 
-  const app = express();
+  const app = createApplication();
 
   if (config.devMode) {
     worker(app, config, onServer);
@@ -57,6 +61,7 @@ export default function hypernova(userConfig, onServer) {
 // And I want it to work on CJS.
 // I want my cake and to eat it all.
 hypernova.Module = Module;
+hypernova.createApplication = createApplication;
 hypernova.createGetComponent = createGetComponent;
 hypernova.createVM = createVM;
 hypernova.getFiles = getFiles;
