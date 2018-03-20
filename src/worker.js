@@ -6,8 +6,6 @@ import renderBatch from './utils/renderBatch';
 import { runAppLifecycle, errorSync, raceTo } from './utils/lifecycle';
 import BatchManager from './utils/BatchManager';
 
-let closing = false;
-
 const attachMiddleware = (app, config) => {
   app.use(bodyParser.json(config.bodyParser));
 };
@@ -16,23 +14,34 @@ const attachEndpoint = (app, config, callback) => {
   app.post(config.endpoint, renderBatch(config, callback));
 };
 
-const initServer = (app, config, callback) => {
-  let server;
+function exit(code) {
+  return () => process.exit(code);
+}
 
-  function exit(code) {
-    return () => process.exit(code);
+class Server {
+  constructor(app, config, callback) {
+    this.server = null;
+    this.app = app;
+    this.config = config;
+    this.callback = callback;
+
+    this.closing = false;
+
+    this.close = this.close.bind(this);
+    this.errorHandler = this.errorHandler.bind(this);
+    this.shutDownSequence = this.shutDownSequence.bind(this);
   }
 
-  function close() {
+  close() {
     return new Promise((resolve) => {
-      if (!server) {
+      if (!this.server) {
         resolve();
         return;
       }
 
       try {
-        closing = true;
-        server.close((e) => {
+        this.closing = true;
+        this.server.close((e) => {
           if (e) { logger.info('Ran into error during close', { stack: e.stack }); }
           resolve();
         });
@@ -43,18 +52,18 @@ const initServer = (app, config, callback) => {
     });
   }
 
-  function shutDownSequence(error, req, code = 1) {
+  shutDownSequence(error, req, code = 1) {
     if (error) {
       logger.info(error.stack);
     }
 
-    raceTo(close(), 1000, 'Closing the worker took too long.')
-      .then(() => runAppLifecycle('shutDown', config.plugins, config, error, req))
+    raceTo(this.close(), 1000, 'Closing the worker took too long.')
+      .then(() => runAppLifecycle('shutDown', this.config.plugins, this.config, error, req))
       .then(exit(code))
       .catch(exit(code));
   }
 
-  function errorHandler(err, req, res, next) { // eslint-disable-line no-unused-vars
+  errorHandler(err, req, res, next) { // eslint-disable-line no-unused-vars
     // If there is an error with body-parser and the status is set then we can safely swallow
     // the error and report it.
     // Here are a list of errors https://github.com/expressjs/body-parser#errors
@@ -66,35 +75,45 @@ const initServer = (app, config, callback) => {
 
       // In a promise in case one of the plugins throws an error.
       new Promise(() => { // eslint-disable-line no-new
-        const manager = new BatchManager(req, res, req.body, config);
-        errorSync(err, config.plugins, manager);
+        const manager = new BatchManager(req, res, req.body, this.config);
+        errorSync(err, this.config.plugins, manager);
       });
 
       return;
     }
-    shutDownSequence(err, req, 1);
+    this.shutDownSequence(err, req, 1);
   }
 
+  initialize() {
+    // run through the initialize methods of any plugins that define them
+    runAppLifecycle('initialize', this.config.plugins, this.config)
+      .then(() => {
+        this.server = this.app.listen(...this.config.listenArgs, this.callback);
+        return null;
+      })
+      .catch(this.shutDownSequence);
+  }
+}
+
+const initServer = (app, config, callback) => {
+  const server = new Server(app, config, callback);
+
   // Middleware
-  app.use(errorHandler);
+  app.use(server.errorHandler);
 
   // Last safety net
-  process.on('uncaughtException', errorHandler);
+  process.on('uncaughtException', server.errorHandler);
 
   // if all the workers are ready then we should be good to start accepting requests
   process.on('message', (msg) => {
     if (msg === 'kill') {
-      shutDownSequence(null, null, 0);
+      server.shutDownSequence(null, null, 0);
     }
   });
 
-  // run through the initialize methods of any plugins that define them
-  runAppLifecycle('initialize', config.plugins, config)
-    .then(() => {
-      server = app.listen(config.port, config.host, callback);
-      return null;
-    })
-    .catch(shutDownSequence);
+  server.initialize();
+
+  return server;
 };
 
 const worker = (app, config, onServer, workerId) => {
@@ -105,22 +124,26 @@ const worker = (app, config, onServer, workerId) => {
     onServer(app, process);
   }
 
+  let server;
+
   // ===== Routes =============================================================
-  attachEndpoint(app, config, () => closing);
+  // server.closing
+  attachEndpoint(app, config, () => server && server.closing);
 
   // ===== initialize server's nuts and bolts =================================
-  initServer(app, config, () => {
+  server = initServer(app, config, () => {
     if (process.send) {
       // tell our coordinator that we're ready to start receiving requests
       process.send({ workerId, ready: true });
     }
 
-    logger.info('Connected', { port: config.port });
+    logger.info('Connected', { listen: config.listenArgs });
   });
 };
 
 worker.attachMiddleware = attachMiddleware;
 worker.attachEndpoint = attachEndpoint;
 worker.initServer = initServer;
+worker.Server = Server;
 
 export default worker;

@@ -233,6 +233,8 @@ Options, and their defaults
   endpoint: '/batch',
   // whether jobs in a batch are processed concurrently
   processJobsConcurrently: true,
+  // arguments for server.listen, by default set to the configured [port, host]
+  listenArgs: null,
 }
 ```
 
