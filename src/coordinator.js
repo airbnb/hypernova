@@ -32,8 +32,8 @@ export function getWorkerCount(getCPUs = getDefaultCPUs) {
 function close() {
   return Promise.all(Object.values(cluster.workers).map((worker) => {
     const promise = new Promise((resolve, reject) => {
-      worker.on('disconnect', resolve);
-      worker.on('exit', (code) => {
+      worker.once('disconnect', resolve);
+      worker.once('exit', (code) => {
         if (code !== 0) reject();
       });
     });
@@ -42,8 +42,33 @@ function close() {
   }));
 }
 
+function kill(signal) {
+  const liveWorkers = Object.values(cluster.workers).filter(worker => !worker.isDead());
+
+  if (liveWorkers.length > 0) {
+    logger.info(`Coordinator killing ${liveWorkers.length} live workers with ${signal}`);
+
+    return Promise.all(liveWorkers.map((worker) => {
+      const promise = new Promise((resolve) => {
+        worker.once('exit', () => resolve());
+      });
+
+      worker.process.kill(signal);
+      return promise;
+    }));
+  }
+
+  return Promise.resolve();
+}
+
+function killSequence(signal) {
+  return () => raceTo(kill(signal), 2000, `Killing workers with ${signal} took too long`);
+}
+
 function shutdown() {
-  return raceTo(close(), 5000, 'Closing the coordinator took too long.');
+  return raceTo(close(), 5000, 'Closing the coordinator took too long.')
+    .then(killSequence('SIGTERM'), killSequence('SIGTERM'))
+    .then(killSequence('SIGKILL'), killSequence('SIGKILL'));
 }
 
 function workersReady(workerCount) {
@@ -57,6 +82,7 @@ function workersReady(workerCount) {
 
 export default (getCPUs) => {
   const workerCount = getWorkerCount(getCPUs);
+  let closing = false;
 
   function onWorkerMessage(msg) {
     if (msg.ready) {
@@ -79,8 +105,12 @@ export default (getCPUs) => {
   });
 
   cluster.on('exit', (worker, code, signal) => {
-    if (worker.suicide === true || code === 0) {
+    if (worker.exitedAfterDisconnect === true || code === 0) {
       logger.info(`Worker #${worker.id} shutting down.`);
+    } else if (closing) {
+      logger.error(
+        `Worker #${worker.id} died with code ${signal || code} during close. Not restarting.`,
+      );
     } else {
       logger.error(`Worker #${worker.id} died with code ${signal || code}. Restarting worker.`);
       const newWorker = cluster.fork();
@@ -90,10 +120,12 @@ export default (getCPUs) => {
 
   process.on('SIGTERM', () => {
     logger.info('Hypernova got SIGTERM. Going down.');
+    closing = true;
     shutdown().then(() => process.exit(0), () => process.exit(1));
   });
 
   process.on('SIGINT', () => {
+    closing = true;
     shutdown().then(() => process.exit(0), () => process.exit(1));
   });
 
