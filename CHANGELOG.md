@@ -3,7 +3,13 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [2.2.4] = 2018-03-20
+## [2.2.5] - 2018-04-05
+
+### Added
+
+- Handle timeout in coordinator shutdown to kill workers that have not shut down.
+
+## [2.2.4] - 2018-03-20
 
 ### Changed
 
