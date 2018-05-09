@@ -18,17 +18,16 @@ const OPTIONS = {
 const transportMapper = (transportConfigs) => {
   const transportKeys = Object.keys(transportConfigs);
 
-  const transports = transportKeys.map(transportKey =>
+  return transportKeys.map(transportKey =>
     new winston.transports[transportKey](transportConfigs[transportKey]));
-
-  return [].concat(...transports);
 };
 
 const loggerInterface = {
   init(config) {
     const options = { ...OPTIONS, ...config };
 
-    const transports = options.transports.map(transportMapper);
+    let transports = options.transports.map(transportMapper);
+    transports = [].concat(...transports);
 
     logger = new winston.Logger({
       transports,
