@@ -3,20 +3,34 @@ import winston from 'winston';
 let logger = null;
 
 const OPTIONS = {
-  level: 'info',
-  colorize: true,
-  timestamp: true,
-  prettyPrint: process.env.NODE_ENV !== 'production',
+  transports: [
+    {
+      Console: {
+        level: 'info',
+        colorize: true,
+        timestamp: true,
+        prettyPrint: process.env.NODE_ENV !== 'production',
+      },
+    },
+  ],
+};
+
+const transportMapper = (transportConfigs) => {
+  const transportKeys = Object.keys(transportConfigs);
+
+  return transportKeys.map(transportKey =>
+    new winston.transports[transportKey](transportConfigs[transportKey]));
 };
 
 const loggerInterface = {
   init(config) {
     const options = { ...OPTIONS, ...config };
 
+    let transports = options.transports.map(transportMapper);
+    transports = [].concat(...transports);
+
     logger = new winston.Logger({
-      transports: [
-        new winston.transports.Console(options),
-      ],
+      transports,
     });
 
     delete loggerInterface.init;
