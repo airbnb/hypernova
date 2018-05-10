@@ -42,7 +42,7 @@ export default function hypernova(userConfig, onServer) {
     config.listenArgs = [config.port, config.host];
   }
 
-  logger.init(config.logger);
+  logger.init(config.logger, config.loggerInstance);
 
   const app = createApplication();
 
