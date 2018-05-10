@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.2.6] - 2018-05-10
+
+### Added
+
+- Allow logger instance to be injected
+
 ## [2.2.5] - 2018-04-05
 
 ### Added
