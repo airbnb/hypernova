@@ -225,8 +225,10 @@ Options, and their defaults
   getCPUs: undefined,
   // the host the app will bind to
   host: '0.0.0.0',
-  // configure the logger
+  // configure the default winston logger
   logger: {},
+  // logger instance to use instead of the default winston logger
+  loggerInstance: undefined,
   // the port the app will start on
   port: 8080,
   // default endpoint path
@@ -279,6 +281,22 @@ hypernova({
 This lets you specify the number of cores Hypernova will run workers on. Receives an argument containing the number of cores as reported by the OS.
 
 If this method is not overridden, or if a falsy value is passed, the default method will return the number of reported cores minus 1.
+
+#### `loggerInstance`
+This lets you provide your own implementation of a logger as long as it has a `log()` method.
+
+```js
+const winston = require('winston');
+const options = {};
+
+hypernova({
+  loggerInstance: new winston.Logger({
+        transports: [
+          new winston.transports.Console(options),
+        ],
+      }),
+});
+```
 
 #### `processJobsConcurrently`
 
