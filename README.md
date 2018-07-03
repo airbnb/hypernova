@@ -195,7 +195,9 @@ The included browser package is a barebones helper which renders markup on the s
 
 List of compatible browser packages:
 
-* [`hypernova-react`](https://github.com/airbnb/hypernova-react).
+* [`hypernova-react`](https://github.com/airbnb/hypernova-react)
+* [`hypernova-aphrodite`](https://github.com/airbnb/hypernova-aphrodite)
+* [`hypernova-styled-components`](https://github.com/viatsko/hypernova-styled-components)
 
 ## Server
 
