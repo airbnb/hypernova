@@ -1,6 +1,5 @@
 const noHTMLError = new TypeError(
-  'HTML was not returned to Hypernova, this is most likely an error within your application. ' +
-  'Check your logs for any uncaught errors and/or rejections.',
+  'HTML was not returned to Hypernova, this is most likely an error within your application. Check your logs for any uncaught errors and/or rejections.',
 );
 noHTMLError.stack = null;
 
@@ -12,8 +11,8 @@ function errorToSerializable(error) {
   // if it's not an actual error then we won't create an Error so that there is no stack trace
   // because no stack trace is better than a stack trace that is generated here.
   const err = (
-    Object.prototype.toString.call(error) === '[object Error]' &&
-    typeof error.stack === 'string'
+    Object.prototype.toString.call(error) === '[object Error]'
+    && typeof error.stack === 'string'
   ) ? error : { name: 'Error', type: 'Error', message: error, stack: '' };
 
   return {

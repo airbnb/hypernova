@@ -2,7 +2,7 @@ import { assert } from 'chai';
 import sinon from 'sinon-sandbox';
 import wrap from 'mocha-wrap';
 
-import hypernova from '../';
+import hypernova from '..';
 
 describe('the runner', () => {
   it('runs server if window is not defined', () => {

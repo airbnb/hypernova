@@ -74,10 +74,7 @@ function shutdown() {
 function workersReady(workerCount) {
   const workers = Object.values(cluster.workers);
 
-  return (
-    workers.length === workerCount &&
-    workers.every(worker => worker.isReady)
-  );
+  return workers.length === workerCount && workers.every(worker => worker.isReady);
 }
 
 export default (getCPUs) => {
