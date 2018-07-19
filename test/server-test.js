@@ -60,7 +60,7 @@ describe('Hypernova server', () => {
       devMode: true,
       getComponent,
       createApplication,
-      port: 8081,
+      port: 8090,
     });
 
     assert.equal(APP_TITLE, hypernovaServer.locals.name);

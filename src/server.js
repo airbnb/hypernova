@@ -46,10 +46,21 @@ export default function hypernova(userConfig, onServer) {
   logger.init(config.logger, config.loggerInstance);
 
   if (typeof config.createApplication !== 'function') {
-    throw new TypeError('Hypernova requires a `createApplication` property and it must be a function that return a valid express instance');
+    throw new TypeError('Hypernova requires a `createApplication` property which must be a function that returns an express instance');
   }
 
   const app = config.createApplication();
+
+  if (
+    typeof app !== 'function'
+    || typeof app.use !== 'function'
+    || typeof app.post !== 'function'
+    || typeof app.listen !== 'function'
+  ) {
+    throw new TypeError(
+      '`createApplication` must return a valid express instance with `use`, `post`, and `listen` methods',
+    );
+  }
 
   if (config.devMode) {
     worker(app, config, onServer);
