@@ -36,4 +36,5 @@ matrix:
     - node_js: "7"
     - node_js: "5"
     - node_js: "iojs"
+    - node_js: "0.12"
     - node_js: "0.10"
