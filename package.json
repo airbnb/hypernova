@@ -65,7 +65,7 @@
     "sinon-sandbox": "^1.0.2"
   },
   "dependencies": {
-    "airbnb-js-shims": "^2.0.0",
+    "airbnb-js-shims": "^2 || ^3",
     "bluebird": "^3.5.1",
     "body-parser": "^1.18.3",
     "express": "^4.16.3",
