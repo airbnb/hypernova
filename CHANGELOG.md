@@ -3,6 +3,11 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.3.0] - 2018-08-04
+
+### Added
+- [deps] allow `airbnb-js-shims v2 or v3
+
 ## [2.2.6] - 2018-05-10
 
 ### Added
