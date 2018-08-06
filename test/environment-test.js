@@ -2,7 +2,6 @@ import { assert } from 'chai';
 import Promise from 'bluebird';
 import '../src/environment';
 
-
 describe('environment', () => {
   it('does not modify the Promise package', () => {
     assert.notStrictEqual(Promise, global.Promise);
