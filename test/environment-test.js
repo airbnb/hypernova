@@ -1,7 +1,13 @@
 import { assert } from 'chai';
+import Promise from 'bluebird';
 import '../src/environment';
 
+
 describe('environment', () => {
+  it('does not modify the Promise package', () => {
+    assert.notStrictEqual(Promise, global.Promise);
+  });
+
   describe('global promise', () => {
     it('has ES6 methods', () => {
       assert.isFunction(global.Promise.prototype.then);

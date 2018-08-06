@@ -18,9 +18,12 @@ function toFastProperties(obj) {
   (function () {}).prototype = obj;
 }
 
-Object.keys(Promise.prototype).filter(isNotMethod).forEach(del(Promise.prototype));
-Object.keys(Promise).filter(isNotMethod).forEach(del(Promise));
-toFastProperties(Promise);
-toFastProperties(Promise.prototype);
+const PromiseCopy = Object.assign({}, Promise);
+PromiseCopy.prototype = Object.assign({}, Promise.prototype);
 
-global.Promise = Promise;
+Object.keys(Promise.prototype).filter(isNotMethod).forEach(del(PromiseCopy.prototype));
+Object.keys(Promise).filter(isNotMethod).forEach(del(PromiseCopy));
+toFastProperties(PromiseCopy);
+toFastProperties(PromiseCopy.prototype);
+
+global.Promise = PromiseCopy;
