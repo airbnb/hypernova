@@ -7,7 +7,7 @@ describe('StrictPromise', () => {
       const message = 'rejected';
 
       StrictPromise.reject(message).catch((rejectedWith) => {
-        assert.isStrictEqual(rejectedWith, message);
+        assert.strictEqual(rejectedWith, message);
         done();
       });
     });
@@ -17,8 +17,8 @@ describe('StrictPromise', () => {
     it('resolves with a given reason', (done) => {
       const message = 'fulfilled';
 
-      StrictPromise.reject(message).catch((resolvedWith) => {
-        assert.isStrictEqual(resolvedWith, message);
+      StrictPromise.resolve(message).then((resolvedWith) => {
+        assert.strictEqual(resolvedWith, message);
         done();
       });
     });
@@ -34,11 +34,11 @@ describe('StrictPromise', () => {
       });
 
       promise.then((resolvedWith) => {
-        assert.isStrictEqual(resolvedWith, message);
+        assert.strictEqual(resolvedWith, message);
         done();
       });
 
-      resolveWith();
+      resolveWith(message);
     });
 
     it('has a rejection callback', (done) => {
@@ -50,11 +50,11 @@ describe('StrictPromise', () => {
       });
 
       promise.then(() => {}, (rejectedWith) => {
-        assert.isStrictEqual(rejectedWith, message);
+        assert.strictEqual(rejectedWith, message);
         done();
       });
 
-      rejectWith();
+      rejectWith(message);
     });
   });
 
@@ -65,12 +65,11 @@ describe('StrictPromise', () => {
     const promise = new StrictPromise((resolve, reject) => {
       rejectWith = reject;
     });
-
     promise.catch((rejectedWith) => {
-      assert.isStrictEqual(rejectedWith, message);
+      assert.strictEqual(rejectedWith, message);
       done();
     });
 
-    rejectWith();
+    rejectWith(message);
   });
 });
