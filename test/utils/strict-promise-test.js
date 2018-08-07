@@ -5,13 +5,13 @@ describe('StrictPromise', () => {
   describe('thennable', () => {
     it('has a fulfillment callback', (done) => {
       let resolveWith;
-      const message = 'rejected';
+      const message = 'fulfilled';
 
-      const promise = new StrictPromise((resolve, reject) => {
-        resolveWith = reject;
+      const promise = new StrictPromise((resolve) => {
+        resolveWith = resolve;
       });
 
-      promise.catch((resolvedWith) => {
+      promise.then((resolvedWith) => {
         assert.isStrictEqual(resolvedWith, message);
         done();
       });
@@ -27,7 +27,7 @@ describe('StrictPromise', () => {
         rejectWith = reject;
       });
 
-      promise.catch((rejectedWith) => {
+      promise.then(() => {}, (rejectedWith) => {
         assert.isStrictEqual(rejectedWith, message);
         done();
       });
