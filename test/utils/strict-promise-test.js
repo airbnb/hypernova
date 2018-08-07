@@ -2,6 +2,62 @@ import { assert } from 'chai';
 import StrictPromise from '../../src/utils/strict-promise';
 
 describe('StrictPromise', () => {
+  describe('static all', () => {
+    it('resolves when the iterable is empty', (done) => {
+      StrictPromise.all([]).then(() => {
+        done();
+      });
+    });
+
+    it('resolves when the whole iterable is resolved', (done) => {
+      const resolveWiths = [];
+      const messages = [
+        'First resolved.',
+        'Second resolved.',
+        'Third resolved',
+      ];
+
+      StrictPromise.all([
+        new StrictPromise((resolve) => {
+          resolveWiths.push(resolve);
+        }),
+        new StrictPromise((resolve) => {
+          resolveWiths.push(resolve);
+        }),
+        new StrictPromise((resolve) => {
+          resolveWiths.push(resolve);
+        }),
+      ]).then((resolvedWiths) => {
+        assert.strictEqual(resolvedWiths[0], messages[0]);
+        assert.strictEqual(resolvedWiths[1], messages[1]);
+        assert.strictEqual(resolvedWiths[2], messages[2]);
+        done();
+      });
+
+      resolveWiths[0](messages[0]);
+      resolveWiths[1](messages[1]);
+      resolveWiths[2](messages[2]);
+    });
+
+    it('rejects with the first rejected iterable', (done) => {
+      let rejectWith;
+      const message = 'Only one rejected.';
+
+      StrictPromise.all([
+        new StrictPromise(() => {}),
+        new StrictPromise((resolve, reject) => {
+          rejectWith = reject;
+        }),
+        new StrictPromise(() => {}),
+      ]).then(() => {}, (rejectedWith) => {
+        assert.strictEqual(rejectedWith, message);
+        done();
+      });
+
+      rejectWith(message);
+    });
+  });
+
   describe('static race', () => {
     it('resolves with the first resolved iterable', (done) => {
       let resolveWith;
