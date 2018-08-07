@@ -2,6 +2,17 @@ import { assert } from 'chai';
 import StrictPromise from '../../src/utils/strict-promise';
 
 describe('StrictPromise', () => {
+  describe('static reject', () => {
+    it('rejects with a given reason', (done) => {
+      const message = 'rejected';
+
+      StrictPromise.reject(message).catch((rejectedWith) => {
+        assert.isStrictEqual(rejectedWith, message);
+        done();
+      });
+    });
+  });
+
   describe('static resolve', () => {
     it('resolves with a given reason', (done) => {
       const message = 'fulfilled';
