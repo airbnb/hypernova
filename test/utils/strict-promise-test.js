@@ -2,6 +2,17 @@ import { assert } from 'chai';
 import StrictPromise from '../../src/utils/strict-promise';
 
 describe('StrictPromise', () => {
+  describe('static resolve', () => {
+    it('resolves with a given reason', (done) => {
+      const message = 'fulfilled';
+
+      StrictPromise.reject(message).catch((resolvedWith) => {
+        assert.isStrictEqual(resolvedWith, message);
+        done();
+      });
+    });
+  });
+
   describe('thennable', () => {
     it('has a fulfillment callback', (done) => {
       let resolveWith;
