@@ -2,6 +2,44 @@ import { assert } from 'chai';
 import StrictPromise from '../../src/utils/strict-promise';
 
 describe('StrictPromise', () => {
+  describe('static race', () => {
+    it('resolves with the first resolved iterable', (done) => {
+      let resolveWith;
+      const message = 'It is a resolved race!';
+
+      StrictPromise.race([
+        new StrictPromise(() => {}),
+        new StrictPromise((resolve) => {
+          resolveWith = resolve;
+        }),
+        new StrictPromise(() => {}),
+      ]).then((resolvedWith) => {
+        assert.strictEqual(resolvedWith, message);
+        done();
+      });
+
+      resolveWith(message);
+    });
+
+    it('rejects with the first rejected iterable', (done) => {
+      let rejectWith;
+      const message = 'It is a rejected race!';
+
+      StrictPromise.race([
+        new StrictPromise(() => {}),
+        new StrictPromise((resolve, reject) => {
+          rejectWith = reject;
+        }),
+        new StrictPromise(() => {}),
+      ]).then(() => {}, (rejectedWith) => {
+        assert.strictEqual(rejectedWith, message);
+        done();
+      });
+
+      rejectWith(message);
+    });
+  });
+
   describe('static reject', () => {
     it('rejects with a given reason', (done) => {
       const message = 'rejected';
