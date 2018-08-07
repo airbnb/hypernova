@@ -14,7 +14,6 @@ describe('environment', () => {
       assert.isFunction(global.Promise.race);
       assert.isFunction(global.Promise.resolve);
       assert.isFunction(global.Promise.reject);
-      assert.isFunction(global.Promise.cast);
     });
   });
 });
