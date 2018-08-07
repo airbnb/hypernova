@@ -159,6 +159,7 @@ describe('StrictPromise', () => {
     const promise = new StrictPromise((resolve, reject) => {
       rejectWith = reject;
     });
+
     promise.catch((rejectedWith) => {
       assert.strictEqual(rejectedWith, message);
       done();
