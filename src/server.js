@@ -12,6 +12,10 @@ import createVM from './createVM';
 import worker from './worker';
 import { raceTo } from './utils/lifecycle';
 
+function createApplication() {
+  return express();
+}
+
 const defaultConfig = {
   bodyParser: {
     limit: 1024 * 1000,
@@ -25,11 +29,8 @@ const defaultConfig = {
   host: '0.0.0.0',
   processJobsConcurrent: true,
   listenArgs: null,
+  createApplication,
 };
-
-function createApplication() {
-  return express();
-}
 
 export default function hypernova(userConfig, onServer) {
   const config = { ...defaultConfig, ...userConfig };
@@ -44,7 +45,22 @@ export default function hypernova(userConfig, onServer) {
 
   logger.init(config.logger, config.loggerInstance);
 
-  const app = createApplication();
+  if (typeof config.createApplication !== 'function') {
+    throw new TypeError('Hypernova requires a `createApplication` property which must be a function that returns an express instance');
+  }
+
+  const app = config.createApplication();
+
+  if (
+    typeof app !== 'function'
+    || typeof app.use !== 'function'
+    || typeof app.post !== 'function'
+    || typeof app.listen !== 'function'
+  ) {
+    throw new TypeError(
+      '`createApplication` must return a valid express instance with `use`, `post`, and `listen` methods',
+    );
+  }
 
   if (config.devMode) {
     worker(app, config, onServer);

@@ -239,6 +239,8 @@ Options, and their defaults
   processJobsConcurrently: true,
   // arguments for server.listen, by default set to the configured [port, host]
   listenArgs: null,
+  // default function to create an express app
+  createApplication: () => express()
 }
 ```
 
@@ -303,6 +305,29 @@ hypernova({
 #### `processJobsConcurrently`
 
 This determines whether jobs in a batch are processed concurrently or serially.  Serial execution is preferable if you use a renderer that is CPU bound and your plugins do not perform IO in the per job hooks.
+
+#### `createApplication`
+This lets you provide your own function that creates an express app.
+You are able to add your own express stuff like more routes, middlewares, etc.
+Notice that you __must__ pass a function that returns an express app without calling the `listen` method!
+
+```js
+const express = require('express');
+const yourOwnAwesomeMiddleware = require('custom-middleware');
+
+hypernova({
+  createApplication: function() {
+    const app = express();
+    app.use(yourOwnAwesomeMiddleware);
+
+    app.get('/health', function(req, res) {
+      return res.status(200).send('OK');
+    });
+
+    // this is mandatory.
+    return app;
+  }
+```
 
 ## API
 
