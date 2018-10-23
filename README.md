@@ -12,7 +12,7 @@
 
 First and foremost, server-side rendering is a better user experience compared to just client-side rendering. The user gets the content faster, the webpage is more accessible when JS fails or is disabled, and search engines have an easier time indexing it.
 
-Secondly, it provides a better developer experience. Writing the same markup twice both on the server in your preferred templating library and in JavaScript can be tedious and hard to maintain. Hypernova lets you write all of your view code in a single place without having to sacrifice the user‘s experience.
+Secondly, it provides a better developer experience. Writing the same markup twice both on the server in your preferred templating library and in JavaScript can be tedious and hard to maintain. Hypernova lets you write all of your view code in a single place without having to sacrifice the user’s experience.
 
 ## How?
 
@@ -33,9 +33,9 @@ Secondly, it provides a better developer experience. Writing the same markup twi
 
 ## Get Started
 
-First you‘ll need to install a few packages: the server, the browser component, and the client. For development purposes it is recommended to install either alongside the code you wish to server-render or in the same application.
+First you’ll need to install a few packages: the server, the browser component, and the client. For development purposes it is recommended to install either alongside the code you wish to server-render or in the same application.
 
-From here on out we‘ll assume you‘re using [`hypernova-ruby`](https://github.com/airbnb/hypernova-ruby) and `React` with [`hypernova-react`](https://github.com/airbnb/hypernova-react).
+From here on out we’ll assume you’re using [`hypernova-ruby`](https://github.com/airbnb/hypernova-ruby) and `React` with [`hypernova-react`](https://github.com/airbnb/hypernova-react).
 
 ### Node
 
@@ -92,7 +92,7 @@ Or install it yourself as:
 
     $ gem install hypernova
 
-Now lets add support on the Rails side for Hypernova. First, we‘ll need to create an initializer.
+Now lets add support on the Rails side for Hypernova. First, we’ll need to create an initializer.
 
 `config/initializers/hypernova_initializer.rb`
 
@@ -103,7 +103,7 @@ Hypernova.configure do |config|
 end
 ```
 
-In your controller, you‘ll need an `:around_filter` so you can opt into Hypernova rendering of view partials.
+In your controller, you’ll need an `:around_filter` so you can opt into Hypernova rendering of view partials.
 
 ```ruby
 class SampleController < ApplicationController
@@ -132,13 +132,13 @@ function MyComponent(props) {
 module.exports = renderReact('MyComponent.js', MyComponent);
 ```
 
-Visit the page and you should see your React component has been server-rendered. If you‘d like to confirm, you can view the source of the page and look for `data-hypernova-key`. If you see a `div` filled with HTML then your component was server-rendered, if the `div` is empty then there was a problem and your component was client-rendered as a fall-back strategy.
+Visit the page and you should see your React component has been server-rendered. If you’d like to confirm, you can view the source of the page and look for `data-hypernova-key`. If you see a `div` filled with HTML then your component was server-rendered, if the `div` is empty then there was a problem and your component was client-rendered as a fall-back strategy.
 
-If the `div` was empty, you can check `stderr` where you‘re running the node service.
+If the `div` was empty, you can check `stderr` where you’re running the node service.
 
 ## Debugging
 
-The [developer plugin](https://github.com/airbnb/hypernova-ruby/blob/master/lib/hypernova/plugins/development_mode_plugin.rb) for [`hypernova-ruby`](https://github.com/airbnb/hypernova-ruby) is useful for debugging issues with Hypernova and why it falls back to client-rendering. It‘ll display a warning plus a stack trace on the page whenever a component fails to render server-side.
+The [developer plugin](https://github.com/airbnb/hypernova-ruby/blob/master/lib/hypernova/plugins/development_mode_plugin.rb) for [`hypernova-ruby`](https://github.com/airbnb/hypernova-ruby) is useful for debugging issues with Hypernova and why it falls back to client-rendering. It’ll display a warning plus a stack trace on the page whenever a component fails to render server-side.
 
 You can install the developer plugin in `examples/simple/config/environments/development.rb`
 
@@ -153,32 +153,32 @@ You can also check the output of the server. The server outputs to `stdout` and 
 
 ## Deploying
 
-The recommended approach is running two separate servers, one that contains your server code and another that contains the Hypernova service. You‘ll need to deploy the JavaScript code to the server that contains the Hypernova service as well.
+The recommended approach is running two separate servers, one that contains your server code and another that contains the Hypernova service. You’ll need to deploy the JavaScript code to the server that contains the Hypernova service as well.
 
 Depending on how you have `getComponent` configured, you might need to restart your Hypernova service on every deploy. If `getComponent` caches any code then a restart is paramount so that Hypernova receives the new changes. Caching is recommended because it helps speed up the service.
 
 ## FAQ
 
-> Isn‘t sending an HTTP request slow?
+> Isn’t sending an HTTP request slow?
 
-There isn‘t a lot of overhead or latency, especially if you keep the servers in close proximity to each other. It‘s as fast as compiling many ERB templates and gives you the benefit of unifying your view code.
+There isn’t a lot of overhead or latency, especially if you keep the servers in close proximity to each other. It’s as fast as compiling many ERB templates and gives you the benefit of unifying your view code.
 
 > Why not an in-memory JS VM?
 
-This is a valid option. If you‘re looking for a siloed experience where the JS service is kept separate, then Hypernova is right for you. This approach also lends itself better to environments that don‘t already have a JS VM available.
+This is a valid option. If you’re looking for a siloed experience where the JS service is kept separate, then Hypernova is right for you. This approach also lends itself better to environments that don’t already have a JS VM available.
 
 > What if the server blows up?
 
-If something bad happens while Hypernova is attempting to server-render your components it‘ll default to failure mode where your page will be client-rendered instead. While this is a comfortable safety net, the goal is to server-render every request.
+If something bad happens while Hypernova is attempting to server-render your components it’ll default to failure mode where your page will be client-rendered instead. While this is a comfortable safety net, the goal is to server-render every request.
 
 ## Pitfalls
 
 These are pitfalls of server-rendering JavaScript code and are not specific to Hypernova.
 
-* You‘ll want to do any DOM-related manipulations in `componentDidMount`. `componentDidMount` runs
+* You’ll want to do any DOM-related manipulations in `componentDidMount`. `componentDidMount` runs
   on the browser but not the server, which means it’s safe to put DOM logic in there.
   Putting logic outside of the component, in the constructor, or in `componentWillMount` will
-  cause the code to fail since the DOM isn‘t present on the server.
+  cause the code to fail since the DOM isn’t present on the server.
 
 * It is recommended that you run your code in a VM sandbox so that requests get a fresh new
   JavaScript environment. In the event that you decide not to use a VM, you should be aware that
@@ -250,7 +250,7 @@ This lets you provide your own implementation on how components are retrieved.
 
 The most common use-case would be to use a VM to keep each module sandboxed between requests. You can use `createGetComponent` from Hypernova to retrieve a `getComponent` function that does this.
 
-`createGetComponent` receives an Object whose keys are the component‘s registered name and the value is the absolute path to the component.
+`createGetComponent` receives an Object whose keys are the component’s registered name and the value is the absolute path to the component.
 
 ```js
 const path = require('path');
@@ -389,7 +389,7 @@ type GetComponent = (name: string) => any;
 function createGetComponent(files: Files, vmOptions: VMOptions): GetComponent {}
 ```
 
-Creates a `getComponent` function which can then be passed into Hypernova so it knows how to retrieve your components. `createGetComponent` will create a VM so all your bundles can run independently from each other on each request so they don‘t interfere with global state. Each component is also cached at startup in order to help speed up run time. The files Object key is the component‘s name and its value is the absolute path to the component.
+Creates a `getComponent` function which can then be passed into Hypernova so it knows how to retrieve your components. `createGetComponent` will create a VM so all your bundles can run independently from each other on each request so they don’t interfere with global state. Each component is also cached at startup in order to help speed up run time. The files Object key is the component’s name and its value is the absolute path to the component.
 
 #### [createVM](src/createVM.js)
 
@@ -401,7 +401,7 @@ type VMContainer = { exportsCache: any, run: Run };
 function createVM(options: VMOptions): VMContainer {}
 ```
 
-Creates a VM using Node‘s [`vm`](https://nodejs.org/api/vm.html) module. Calling `run` will run the provided code and return its `module.exports`. `exportsCache` is an instance of [`lru-cache`](https://github.com/isaacs/node-lru-cache).
+Creates a VM using Node’s [`vm`](https://nodejs.org/api/vm.html) module. Calling `run` will run the provided code and return its `module.exports`. `exportsCache` is an instance of [`lru-cache`](https://github.com/isaacs/node-lru-cache).
 
 #### [getFiles](src/getFiles.js)
 
@@ -413,7 +413,7 @@ A utility function that allows you to retrieve all JS files recursively given an
 
 #### [Module](src/Module.js)
 
-`Module` is a class that mimics Node‘s [`module`](https://github.com/nodejs/node/blob/master/lib/module.js) interface. It makes `require` relative to whatever directory it‘s run against and makes sure that each JavaScript module runs in its own clean sandbox.
+`Module` is a class that mimics Node’s [`module`](https://github.com/nodejs/node/blob/master/lib/module.js) interface. It makes `require` relative to whatever directory it’s run against and makes sure that each JavaScript module runs in its own clean sandbox.
 
 #### [loadModules](src/loadModules.js)
 
