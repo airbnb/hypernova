@@ -2,11 +2,9 @@ language: node_js
 os:
  - linux
 node_js:
-  - "9"
+  - "10"
   - "8"
-  - "7"
   - "6"
-  - "5"
   - "4"
   - "iojs"
   - "0.12"
@@ -32,9 +30,6 @@ matrix:
     - node_js: "lts/*"
       env: COVERAGE=true
   allow_failures:
-    - node_js: "9"
-    - node_js: "7"
-    - node_js: "5"
     - node_js: "iojs"
     - node_js: "0.12"
     - node_js: "0.10"
