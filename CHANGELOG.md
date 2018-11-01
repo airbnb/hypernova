@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.4.0] - 2018-08-04
+
+### Added
+- Add option to pass an express instance in the configuration (#132)
+
+### Docs
+- Update README.md: correctly use curly quotation marks (#143)
+
 ## [2.3.0] - 2018-08-04
 
 ### Added
