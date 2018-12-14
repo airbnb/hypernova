@@ -130,6 +130,18 @@ const worker = (app, config, onServer, workerId) => {
   // server.closing
   attachEndpoint(app, config, () => server && server.closing);
 
+  function registerSignalHandler(sig) {
+    process.on(sig, () => {
+      logger.info(`Hypernova worker got ${sig}. Going down`);
+      server.shutDownSequence();
+    });
+  }
+
+  // Gracefully shutdown the worker when not running in a cluster (devMode = true)
+  if(config.devMode) {
+    ['SIGTERM', 'SIGINT'].map(registerSignalHandler);
+  }
+
   // ===== initialize server's nuts and bolts =================================
   server = initServer(app, config, () => {
     if (process.send) {
