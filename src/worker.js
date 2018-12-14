@@ -138,7 +138,7 @@ const worker = (app, config, onServer, workerId) => {
   }
 
   // Gracefully shutdown the worker when not running in a cluster (devMode = true)
-  if(config.devMode) {
+  if (config.devMode) {
     ['SIGTERM', 'SIGINT'].map(registerSignalHandler);
   }
 
