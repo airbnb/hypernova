@@ -133,7 +133,7 @@ const worker = (app, config, onServer, workerId) => {
   function registerSignalHandler(sig) {
     process.on(sig, () => {
       logger.info(`Hypernova worker got ${sig}. Going down`);
-      server.shutDownSequence();
+      server.shutDownSequence(null, null, 0);
     });
   }
 
