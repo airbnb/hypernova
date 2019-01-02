@@ -3,6 +3,11 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.5.0] - 2019-01-02
+
+### Added
+- worker: Add graceful shutdown (#147, #148)
+
 ## [2.4.0] - 2018-08-04
 
 ### Added
