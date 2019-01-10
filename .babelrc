@@ -3,5 +3,6 @@
   "plugins": [
     "add-module-exports",
     ["transform-replace-object-assign", { "moduleSpecifier": "object.assign" }],
+    "transform-es2015-modules-umd",
   ]
 }
