@@ -20,19 +20,54 @@ function uuid() {
 }
 
 function encode(obj) {
+  function base64encode(obj) {
+    const jsonPayload = JSON.stringify(obj);
+    let ret;
+    if (typeof window !== 'undefined') {
+      const b64EncodeUnicode = str =>
+        // eslint-disable-next-line
+        btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g,
+          (match, p1) => String.fromCharCode(`0x${p1}`)));
+      ret = b64EncodeUnicode(jsonPayload);
+    } else if (process) {
+      ret = Buffer.from(jsonPayload).toString('base64');
+    } else {
+      ret = jsonPayload;
+    }
+    return ret;
+  }
   return ENCODE.reduce((str, coding) => {
     const [encodeChar, htmlEntity] = coding;
     return str.replace(new RegExp(encodeChar, 'g'), htmlEntity);
-  }, JSON.stringify(obj));
+  }, base64encode(obj));
 }
 
 function decode(res) {
-  const jsonPayload = ENCODE.reduceRight((str, coding) => {
+  const payload = ENCODE.reduceRight((str, coding) => {
     const [encodeChar, htmlEntity] = coding;
     return str.replace(new RegExp(htmlEntity, 'g'), encodeChar);
   }, res);
 
-  return JSON.parse(jsonPayload);
+  // Backward compatibility with non base 64 payloads
+  if (payload.trim().startsWith('{')) {
+    return JSON.parse(payload);
+  }
+
+  let ret;
+  if (typeof window !== 'undefined') {
+    /* eslint-disable */
+    const b64DecodeUnicode = str => decodeURIComponent(
+        atob(str).split('').map(c => {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+      }).join(''));
+    /* eslint-enble */
+    ret = b64DecodeUnicode(payload);
+  } else if (process) {
+    ret = Buffer.from(payload, 'base64').toString('utf-8');
+  } else {
+    ret = payload;
+  }
+  return JSON.parse(ret);
 }
 
 function makeValidDataAttribute(attr, value) {
