@@ -2,11 +2,7 @@
 
 > A service for server-side rendering your JavaScript views
 
-[![Join the chat at https://gitter.im/airbnb/hypernova](https://badges.gitter.im/airbnb/hypernova.svg)](https://gitter.im/airbnb/hypernova?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
-[![NPM version](https://badge.fury.io/js/hypernova.svg)](http://badge.fury.io/js/hypernova)
-[![Build Status](https://secure.travis-ci.org/airbnb/hypernova.svg?branch=master)](http://travis-ci.org/airbnb/hypernova)
-[![Dependency Status](https://david-dm.org/airbnb/hypernova.svg)](https://david-dm.org/airbnb/hypernova)
+Skroutz Fork of hypernova
 
 ## Why?
 

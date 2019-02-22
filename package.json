@@ -1,6 +1,6 @@
 {
-  "name": "hypernova",
-  "version": "2.5.0",
+  "name": "@skroutz/hypernova",
+  "version": "2.5.1",
   "description": "A service for server-side rendering your JavaScript views",
   "main": "lib/index.js",
   "scripts": {
@@ -21,7 +21,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:airbnb/hypernova.git"
+    "url": "git@github.com:skroutz/hypernova.git"
   },
   "keywords": [
     "react",
@@ -42,9 +42,9 @@
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/airbnb/hypernova/issues"
+    "url": "https://github.com/skroutz/hypernova/issues"
   },
-  "homepage": "https://github.com/airbnb/hypernova",
+  "homepage": "https://github.com/skroutz/hypernova",
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-plugin-add-module-exports": "^0.2.1",
