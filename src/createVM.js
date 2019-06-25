@@ -1,4 +1,4 @@
-import lruCache from 'lru-cache';
+import LRUCache from 'lru-cache';
 import crypto from 'crypto';
 import Module from './Module';
 
@@ -11,7 +11,7 @@ export default (options = {}) => {
   // This is to cache the entry point of all bundles which makes running on a vm blazing fast.
   // Everyone gets their own sandbox to play with and nothing is leaked between requests.
   // We're caching with `code` as the key to ensure that if the code changes we break the cache.
-  const exportsCache = lruCache({
+  const exportsCache = new LRUCache({
     max: options.cacheSize,
   });
 
