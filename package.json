@@ -59,7 +59,7 @@
     "istanbul": "^1.0.0-alpha.2",
     "mocha": "^3.5.3",
     "mocha-wrap": "^2.1.2",
-    "rimraf": "^2.6.3",
+    "rimraf": "^3.0.0",
     "safe-publish-latest": "^1.1.2",
     "sinon": "^3.3.0",
     "sinon-sandbox": "^1.0.2"
