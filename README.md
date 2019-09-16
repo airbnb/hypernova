@@ -378,6 +378,17 @@ function fromScript(attrs: Attributes): DeserializedData {}
 The inverse of `toScript`, this function runs on the browser and attempts to find and `JSON.parse` the contents of the server generated script.
 `attrs` is an object where the key will be a `data-key` to be placed on the element, and the value is the data attribute's value.
 
+The `serialize` function uses the attributes `DATA_KEY` and `DATA_ID` to generate the data markup. They can be used in the `fromScript` function to get the serialized data.
+
+```typescript
+import { DATA_KEY, DATA_ID } from 'hypernova'
+
+fromScript({
+    [DATA_KEY]: key,
+    [DATA_ID]: id,
+ });
+```
+
 ### Server
 
 #### [createGetComponent](src/createGetComponent.js)

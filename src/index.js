@@ -92,3 +92,5 @@ hypernova.toScript = toScript;
 hypernova.fromScript = fromScript;
 hypernova.serialize = serialize;
 hypernova.load = load;
+hypernova.DATA_KEY = DATA_KEY;
+hypernova.DATA_ID = DATA_ID;
