@@ -257,7 +257,7 @@ const path = require('path');
 
 hypernova({
   getComponent: createGetComponent({
-    MyComponent: path.resolve(path.join('app', 'assets', 'javascripts', 'MyComponent.js')),
+    'MyComponent.js': path.resolve(path.join('app', 'assets', 'javascripts', 'MyComponent.js')),
   }),
 });
 ```
