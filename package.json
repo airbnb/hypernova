@@ -54,7 +54,7 @@
     "cheerio": "^1.0.0-rc.3",
     "eslint": "^5.16.0",
     "eslint-config-airbnb-base": "^13.1.0",
-    "eslint-plugin-import": "^2.17.3",
+    "eslint-plugin-import": "^2.19.1",
     "in-publish": "^2.0.0",
     "istanbul": "^1.0.0-alpha.2",
     "mocha": "^3.5.3",
