@@ -55,7 +55,7 @@
     "eslint": "^5.16.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.17.3",
-    "in-publish": "^2.0.0",
+    "in-publish": "^2.0.1",
     "istanbul": "^1.0.0-alpha.2",
     "mocha": "^3.5.3",
     "mocha-wrap": "^2.1.2",
