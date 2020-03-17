@@ -6,6 +6,8 @@ const RIGHT = '-->';
 const ENCODE = [
   ['&', '&amp;'],
   ['>', '&gt;'],
+  ['<', '&lt;'],
+  ['/', '&#47;'],
 ];
 
 const DATA_KEY = 'hypernova-key';
