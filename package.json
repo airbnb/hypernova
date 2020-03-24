@@ -1,7 +1,10 @@
 {
-  "name": "hypernova",
+  "name": "@shopify/hypernova",
   "version": "2.5.0",
   "description": "A service for server-side rendering your JavaScript views",
+	"publishConfig": {
+		"access": "restricted"
+	},
   "main": "lib/index.js",
   "scripts": {
     "prepublish": "not-in-publish || safe-publish-latest && npm run build",
