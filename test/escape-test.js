@@ -7,7 +7,7 @@ describe('escaping', () => {
   it('escapes', () => {
     const html = serialize('foo', '', { foo: '</script>', bar: '&gt;' });
 
-    assert.include(html, '</script&gt;');
+    assert.include(html, '&lt;&#47;script&gt;');
     assert.include(html, '&amp;gt;');
   });
 
