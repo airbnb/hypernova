@@ -2,7 +2,8 @@ language: node_js
 os:
  - linux
 node_js:
-  - "11"
+  - "13"
+  - "12"
   - "10"
   - "8"
   - "6"
@@ -14,7 +15,7 @@ before_install:
   - 'nvm install-latest-npm'
 install:
   - 'if [ "${TRAVIS_NODE_VERSION}" = "0.6" ]; then nvm install --latest-npm 0.8 && npm install && nvm use "${TRAVIS_NODE_VERSION}"; else npm install; fi;'
-  - 'npm ls > /dev/null'
+  - 'npm prune && npm ls' # > /dev/null'
 script:
   - 'if [ -n "${PRETEST-}" ]; then npm run pretest ; fi'
   - 'if [ -n "${POSTTEST-}" ]; then npm run posttest ; fi'
@@ -31,6 +32,4 @@ matrix:
     - node_js: "lts/*"
       env: COVERAGE=true
   allow_failures:
-    - node_js: "iojs"
-    - node_js: "0.12"
     - node_js: "0.10"
