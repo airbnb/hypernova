@@ -5,6 +5,7 @@ const RIGHT = '-->';
 
 const ENCODE = [
   ['&', '&amp;'],
+  ['<', '&lt;'],
   ['>', '&gt;'],
 ];
 
