@@ -2,6 +2,7 @@ import cluster from 'cluster';
 import os from 'os';
 
 import './environment';
+import Promise from './promise';
 import logger from './utils/logger';
 import { raceTo } from './utils/lifecycle';
 

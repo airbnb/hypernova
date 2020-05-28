@@ -1,3 +1,5 @@
+import Promise from '../promise';
+
 const noHTMLError = new TypeError(
   'HTML was not returned to Hypernova, this is most likely an error within your application. Check your logs for any uncaught errors and/or rejections.',
 );

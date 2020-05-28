@@ -1,3 +1,4 @@
+import Promise from '../promise';
 import logger from './logger';
 
 const MAX_LIFECYCLE_EXECUTION_TIME_IN_MS = 300;
