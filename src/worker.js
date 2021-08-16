@@ -3,11 +3,24 @@ import bodyParser from 'body-parser';
 import './environment';
 import logger from './utils/logger';
 import renderBatch from './utils/renderBatch';
-import { runAppLifecycle, errorSync, raceTo } from './utils/lifecycle';
+import { errorSync, raceTo, runAppLifecycle } from './utils/lifecycle';
 import BatchManager from './utils/BatchManager';
 
 const attachMiddleware = (app, config) => {
   app.use(bodyParser.json(config.bodyParser));
+};
+
+const attachMiddlewares = (app, config) => {
+  attachMiddleware(app, config);
+
+  const { middlewares } = config;
+  if (Array.isArray(middlewares)) {
+    middlewares.forEach((middleware) => {
+      if (typeof middleware === 'function') {
+        app.use(middleware);
+      }
+    });
+  }
 };
 
 const attachEndpoint = (app, config, callback) => {
@@ -117,8 +130,8 @@ const initServer = (app, config, callback) => {
 };
 
 const worker = (app, config, onServer, workerId) => {
-  // ===== Middleware =========================================================
-  attachMiddleware(app, config);
+  // ===== Middlewares =========================================================
+  attachMiddlewares(app, config);
 
   if (onServer) {
     onServer(app, process);
@@ -154,6 +167,7 @@ const worker = (app, config, onServer, workerId) => {
 };
 
 worker.attachMiddleware = attachMiddleware;
+worker.attachMiddlewares = attachMiddlewares;
 worker.attachEndpoint = attachEndpoint;
 worker.initServer = initServer;
 worker.Server = Server;
