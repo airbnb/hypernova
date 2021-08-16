@@ -29,6 +29,7 @@ export default (options = {}) => {
 
       const module = new Module(name, environment);
       module.load(name);
+      // eslint-disable-next-line no-underscore-dangle
       module._compile(code, name);
 
       exportsCache.set(key, module.exports);

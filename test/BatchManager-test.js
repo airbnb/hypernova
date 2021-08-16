@@ -31,6 +31,7 @@ jobs.bar.name = 'bar'; // component not registered
 
 const req = {};
 const res = {};
+// eslint-disable-next-line no-underscore-dangle
 const _strategies = {
   [COMPONENT_NAME]: sinon.stub().returns('html'),
   baz: sinon.stub().returns(undefined),

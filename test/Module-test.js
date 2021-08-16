@@ -8,6 +8,7 @@ function run(code) {
 
   const module = new Module(name);
   module.load(name);
+  // eslint-disable-next-line no-underscore-dangle
   module._compile(code, name);
 
   return module.exports;

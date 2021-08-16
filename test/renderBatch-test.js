@@ -3,11 +3,13 @@ import renderBatch from '../lib/utils/renderBatch';
 
 class Response {
   status(status) {
+    // eslint-disable-next-line no-underscore-dangle
     this._status = status;
     return this;
   }
 
   json(res) {
+    // eslint-disable-next-line no-underscore-dangle
     this._json = res;
     return this;
   }
@@ -16,7 +18,9 @@ class Response {
 
   getResponse() {
     return {
+      // eslint-disable-next-line no-underscore-dangle
       status: this._status,
+      // eslint-disable-next-line no-underscore-dangle
       json: this._json,
     };
   }

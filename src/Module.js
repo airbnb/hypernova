@@ -10,6 +10,7 @@ const NativeModules = process.binding('natives');
 // this is cool since we can now have different extensions for VM than for where your program is
 // running.
 // If you want to add an extension then you can use addExtension defined and exported below.
+// eslint-disable-next-line no-underscore-dangle
 const moduleExtensions = { ...NativeModule._extensions };
 
 function isNativeModule(id) {
@@ -50,6 +51,7 @@ class Module {
   load(filename) {
     ok(!this.loaded);
     this.filename = filename;
+    // eslint-disable-next-line no-underscore-dangle
     this.paths = NativeModule._nodeModulePaths(path.dirname(filename));
   }
 
@@ -65,12 +67,14 @@ class Module {
     return Module.loadFile(filePath, this);
   }
 
+  // eslint-disable-next-line no-underscore-dangle
   _compile(content, filename) {
     const self = this;
 
     function require(filePath) {
       return self.require(filePath);
     }
+    // eslint-disable-next-line no-underscore-dangle
     require.resolve = request => NativeModule._resolveFilename(request, this);
     require.main = process.mainModule;
     require.extensions = moduleExtensions;
@@ -98,6 +102,7 @@ class Module {
   }
 
   static loadFile(file, parent) {
+    // eslint-disable-next-line no-underscore-dangle
     const filename = NativeModule._resolveFilename(file, parent);
 
     if (parent) {
