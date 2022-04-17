@@ -1,0 +1,19 @@
+{
+  "name": "hypernova-simple-example",
+  "private": true,
+  "version": "1.0.0",
+  "description": "A sample Rails application that uses Hypernova to server render.",
+  "main": "hypernova.js",
+  "dependencies": {
+    "hypernova": "^1.0.0",
+    "hypernova-react": "^1.0.0",
+    "react": "^15.0.1",
+    "react-dom": "^15.0.1"
+  },
+  "devDependencies": {
+    "browserify": "^13.0.0",
+    "browserify-incremental": "^3.1.1"
+  },
+  "author": "Josh Perez <josh.perez@airbnb.com>",
+  "license": "MIT"
+}
