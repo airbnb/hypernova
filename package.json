@@ -67,14 +67,14 @@
   },
   "dependencies": {
     "airbnb-js-shims": "^2 || ^3",
-    "bluebird": "^3.5.5",
-    "body-parser": "^1.19.0",
-    "express": "^4.17.1",
-    "glob": "^7.1.4",
+    "bluebird": "^3.7.2",
+    "body-parser": "^1.20.0",
+    "express": "^4.18.0",
+    "glob": "^7.2.0",
     "has": "^1.0.3",
     "lru-cache": "^4.1.5",
-    "object.assign": "^4.1.0",
-    "winston": "^2.4.4"
+    "object.assign": "^4.1.2",
+    "winston": "^2.4.5"
   },
   "engines": {
     "node": ">= 0.10"
