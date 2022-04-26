@@ -1,4 +1,4 @@
-const hypernova = require('../../');
+const hypernova = require('../..');
 
 module.exports = hypernova({
   server: function () {},

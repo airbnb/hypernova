@@ -99,7 +99,6 @@ class BatchManager {
       return obj;
     }, {});
 
-
     // Each plugin receives it's own little key-value data store that is scoped privately
     // to the plugin for the life time of the request. This is achieved simply through lexical
     // closure.

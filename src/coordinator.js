@@ -43,7 +43,7 @@ function close() {
 }
 
 function kill(signal) {
-  const liveWorkers = Object.values(cluster.workers).filter(worker => !worker.isDead());
+  const liveWorkers = Object.values(cluster.workers).filter((worker) => !worker.isDead());
 
   if (liveWorkers.length > 0) {
     logger.info(`Coordinator killing ${liveWorkers.length} live workers with ${signal}`);
@@ -74,7 +74,7 @@ function shutdown() {
 function workersReady(workerCount) {
   const workers = Object.values(cluster.workers);
 
-  return workers.length === workerCount && workers.every(worker => worker.isReady);
+  return workers.length === workerCount && workers.every((worker) => worker.isReady);
 }
 
 export default (getCPUs) => {
@@ -87,11 +87,11 @@ export default (getCPUs) => {
     }
 
     if (workersReady(workerCount)) {
-      Object.values(cluster.workers).forEach(worker => worker.send('healthy'));
+      Object.values(cluster.workers).forEach((worker) => worker.send('healthy'));
     }
   }
 
-  cluster.on('online', worker => logger.info(`Worker #${worker.id} is now online`));
+  cluster.on('online', (worker) => logger.info(`Worker #${worker.id} is now online`));
 
   cluster.on('listening', (worker, address) => {
     logger.info(`Worker #${worker.id} is now connected to ${address.address}:${address.port}`);
@@ -128,5 +128,5 @@ export default (getCPUs) => {
 
   Array.from({ length: workerCount }, () => cluster.fork());
 
-  Object.values(cluster.workers).forEach(worker => worker.on('message', onWorkerMessage));
+  Object.values(cluster.workers).forEach((worker) => worker.on('message', onWorkerMessage));
 };

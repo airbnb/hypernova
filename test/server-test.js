@@ -8,13 +8,13 @@ describe('Hypernova server', () => {
   beforeEach(() => {
     try {
       [
-        '../lib/utils/logger.js',
-        '../lib/worker.js',
-        '../lib/server.js',
-        '../server.js',
-      ].forEach(module => delete require.cache[require.resolve(module)]);
+        '../lib/utils/logger',
+        '../lib/worker',
+        '../lib/server',
+        '../server',
+      ].forEach((module) => delete require.cache[require.resolve(module)]);
 
-      hypernova = require('../server.js'); // eslint-disable-line global-require
+      hypernova = require('../server'); // eslint-disable-line global-require
     } catch (e) {
       console.error('Couldnt remove dependecy or load the hypernova module.');
     }

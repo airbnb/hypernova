@@ -9,7 +9,7 @@ function cheerioToDOM($, className) {
     const node = cheerioObj;
     node.nodeName = node.name.toUpperCase();
     node.innerHTML = $(node).html();
-    node.getAttribute = attr => $(node).data(attr.replace('data-', ''));
+    node.getAttribute = (attr) => $(node).data(attr.replace('data-', ''));
     return node;
   })[0];
 }
@@ -31,7 +31,7 @@ wrap().withGlobal('document', () => ({}))
         spy(className);
         return cheerioToDOM($, className);
       };
-      global.document.querySelectorAll = classname => [cheerioToDOM($, classname)];
+      global.document.querySelectorAll = (classname) => [cheerioToDOM($, classname)];
 
       // Calling it again for the client.
       load('Component3');
