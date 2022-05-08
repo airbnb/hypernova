@@ -1,9 +1,0 @@
-{
-  "env": {
-    "mocha": true
-  },
-  "rules": {
-    "indent": 1,
-    "prefer-promise-reject-errors": 0,
-  }
-}

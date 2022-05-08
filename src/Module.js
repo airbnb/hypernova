@@ -71,7 +71,7 @@ class Module {
     function require(filePath) {
       return self.require(filePath);
     }
-    require.resolve = request => NativeModule._resolveFilename(request, this);
+    require.resolve = (request) => NativeModule._resolveFilename(request, this);
     require.main = process.mainModule;
     require.extensions = moduleExtensions;
     require.cache = this.cache;

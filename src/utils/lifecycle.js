@@ -14,7 +14,7 @@ const PROMISE_TIMEOUT = {};
  * @returns {Function} - the resulting predicate function
  */
 export function hasMethod(name) {
-  return obj => typeof obj[name] === 'function';
+  return (obj) => typeof obj[name] === 'function';
 }
 
 /**
@@ -62,7 +62,7 @@ export function raceTo(promise, ms, msg) {
 export function runAppLifecycle(lifecycle, plugins, config, error, ...args) {
   try {
     const promise = Promise.all(
-      plugins.filter(hasMethod(lifecycle)).map(plugin => plugin[lifecycle](config, error, ...args)),
+      plugins.filter(hasMethod(lifecycle)).map((plugin) => plugin[lifecycle](config, error, ...args)),
     );
 
     return raceTo(
@@ -97,7 +97,7 @@ export function runLifecycle(lifecycle, plugins, manager, token) {
     const promise = Promise.all(
       plugins
         .filter(hasMethod(lifecycle))
-        .map(plugin => plugin[lifecycle](manager.contextFor(plugin, token))),
+        .map((plugin) => plugin[lifecycle](manager.contextFor(plugin, token))),
     );
 
     return raceTo(
@@ -124,7 +124,7 @@ export function runLifecycle(lifecycle, plugins, manager, token) {
 export function runLifecycleSync(lifecycle, plugins, manager, token) {
   plugins
     .filter(hasMethod(lifecycle))
-    .forEach(plugin => plugin[lifecycle](manager.contextFor(plugin, token)));
+    .forEach((plugin) => plugin[lifecycle](manager.contextFor(plugin, token)));
 }
 
 /**
@@ -141,7 +141,7 @@ export function runLifecycleSync(lifecycle, plugins, manager, token) {
 export function errorSync(err, plugins, manager, token) {
   plugins
     .filter(hasMethod('onError'))
-    .forEach(plugin => plugin.onError(manager.contextFor(plugin, token), err));
+    .forEach((plugin) => plugin.onError(manager.contextFor(plugin, token), err));
 }
 
 /**
@@ -190,7 +190,7 @@ function processJobsSerially(jobs, plugins, manager) {
 
 function processJobsConcurrently(jobs, plugins, manager) {
   return Promise.all(
-    Object.keys(jobs).map(token => processJob(token, plugins, manager)),
+    Object.keys(jobs).map((token) => processJob(token, plugins, manager)),
   );
 }
 

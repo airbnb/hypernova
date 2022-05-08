@@ -15,7 +15,7 @@ const DATA_ID = 'hypernova-id';
 function uuid() {
   return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(
     /[018]/g,
-    x => (x ^ Math.random() * 16 >> x / 4).toString(16), // eslint-disable-line no-mixed-operators, no-bitwise, max-len
+    (x) => (x ^ Math.random() * 16 >> x / 4).toString(16), // eslint-disable-line no-mixed-operators, no-bitwise, max-len
   );
 }
 
@@ -42,13 +42,13 @@ function makeValidDataAttribute(attr, value) {
 }
 
 function toScript(attrs, data) {
-  const dataAttributes = Object.keys(attrs).map(name => makeValidDataAttribute(name, attrs[name]));
+  const dataAttributes = Object.keys(attrs).map((name) => makeValidDataAttribute(name, attrs[name]));
   return `<script type="application/json" ${dataAttributes.join(' ')}>${LEFT}${encode(data)}${RIGHT}</script>`; // eslint-disable-line max-len
 }
 
 function fromScript(attrs) {
   const selectors = Object.keys(attrs)
-    .map(name => `[${makeValidDataAttribute(name, attrs[name])}]`)
+    .map((name) => `[${makeValidDataAttribute(name, attrs[name])}]`)
     .join('');
   const node = document.querySelector(`script${selectors}`);
   if (!node) return null;

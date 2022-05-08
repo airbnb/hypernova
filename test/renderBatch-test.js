@@ -1,6 +1,8 @@
 import { assert } from 'chai';
 import renderBatch from '../lib/utils/renderBatch';
 
+/* eslint max-classes-per-file: 1 */
+
 class Response {
   status(status) {
     this._status = status;
