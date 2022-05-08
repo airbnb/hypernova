@@ -10,7 +10,7 @@ const NativeModules = process.binding('natives');
 // this is cool since we can now have different extensions for VM than for where your program is
 // running.
 // If you want to add an extension then you can use addExtension defined and exported below.
-const moduleExtensions = Object.assign({}, NativeModule._extensions);
+const moduleExtensions = { ...NativeModule._extensions };
 
 function isNativeModule(id) {
   return has(NativeModules, id);
@@ -71,7 +71,7 @@ class Module {
     function require(filePath) {
       return self.require(filePath);
     }
-    require.resolve = request => NativeModule._resolveFilename(request, this);
+    require.resolve = (request) => NativeModule._resolveFilename(request, this);
     require.main = process.mainModule;
     require.extensions = moduleExtensions;
     require.cache = this.cache;
@@ -106,7 +106,7 @@ class Module {
     }
 
     if (isNativeModule(filename)) {
-      // eslint-disable-next-line global-require
+      // eslint-disable-next-line global-require, import/no-dynamic-require
       return require(filename);
     }
 

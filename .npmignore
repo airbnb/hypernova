@@ -38,10 +38,5 @@ TODO
 .nyc_output
 coverage
 
-# build output
-lib
-
-# Only apps should have lockfiles
-yarn.lock
-npm-shrinkwrap.json
-package-lock.json
+examples
+docs

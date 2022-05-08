@@ -1,16 +1,24 @@
 {
   "name": "hypernova",
-  "version": "2.0.0",
+  "version": "2.5.0",
   "description": "A service for server-side rendering your JavaScript views",
   "main": "lib/index.js",
   "scripts": {
-    "prepublish": "npm run build",
-    "build": "rimraf lib && babel src -d lib",
+    "prepublishOnly": "safe-publish-latest && npm run build",
+    "prepublish": "not-in-publish || npm run prepublishOnly",
+    "clean": "rimraf lib",
+    "prebuild": "npm run clean",
+    "build": "babel src -d lib",
+    "prelint": "npm run build",
     "lint": "eslint src test",
     "pretest": "npm run --silent lint",
-    "test": "npm run build && npm run test:coverage && npm run --silent cover:check",
-    "tests-only": "npm run build && npm run test:quick",
-    "test:coverage": "babel-node node_modules/.bin/istanbul cover --report html node_modules/.bin/_mocha -- -R tap test/init.js test/*-test.js",
+    "test": "npm run coverage",
+    "pretests-only": "npm run build",
+    "tests-only": "npm run test:quick",
+    "posttest": "aud --production",
+    "precoverage": "npm run build",
+    "coverage": "babel-node node_modules/.bin/istanbul cover --report html node_modules/.bin/_mocha -- -R tap test/init.js test/*-test.js",
+    "postcoverage": "npm run cover:check",
     "cover:check": "istanbul check-coverage && echo code coverage thresholds met, achievement unlocked!",
     "test:quick": "babel-node node_modules/.bin/_mocha -R tap test/init.js test/*-test.js"
   },
@@ -35,49 +43,49 @@
     "Ian Myers <ian.myers@airbnb.com>",
     "Jake Teton-Landis <jake.tl@airbnb.com>"
   ],
-  "files": [
-    "README.md",
-    "lib",
-    "src",
-    "server.js",
-    "test",
-    ".eslintrc",
-    ".babelrc"
-  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/airbnb/hypernova/issues"
   },
   "homepage": "https://github.com/airbnb/hypernova",
   "devDependencies": {
-    "babel-cli": "^6.14.0",
+    "aud": "^2.0.0",
+    "babel-cli": "^6.26.0",
     "babel-plugin-add-module-exports": "^0.2.1",
-    "babel-preset-airbnb": "^2.0.0",
-    "chai": "^3.5.0",
-    "cheerio": "^0.22.0",
-    "eslint": "^3.4.0",
-    "eslint-config-airbnb": "^10.0.1",
-    "eslint-plugin-import": "^1.14.0",
-    "eslint-plugin-jsx-a11y": "^2.2.1",
-    "eslint-plugin-react": "^6.2.0",
-    "istanbul": "^1.0.0-alpha.2",
-    "mocha": "^3.0.2",
-    "mocha-wrap": "^2.0.5",
-    "rimraf": "^2.5.4",
-    "sinon": "^1.17.5",
+    "babel-plugin-transform-replace-object-assign": "^1.0.0",
+    "babel-preset-airbnb": "^2.5.3",
+    "chai": "^4.3.6",
+    "cheerio": "=1.0.0-rc.3",
+    "eslint": "^8.14.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "in-publish": "^2.0.1",
+    "mocha": "^3.5.3",
+    "mocha-wrap": "^2.1.2",
+    "nyc": "^10.3.2",
+    "rimraf": "^2.6.3",
+    "safe-publish-latest": "^2.0.0",
+    "sinon": "^3.3.0",
     "sinon-sandbox": "^1.0.2"
   },
   "dependencies": {
-    "airbnb-js-shims": "^1.0.1",
-    "bluebird": "^3.4.6",
-    "body-parser": "^1.15.2",
-    "express": "^4.14.0",
-    "glob": "^7.0.6",
-    "has": "^1.0.1",
-    "lru-cache": "^4.0.1",
-    "winston": "^2.2.0"
+    "airbnb-js-shims": "^2 || ^3",
+    "bluebird": "^3.7.2",
+    "body-parser": "^1.20.0",
+    "express": "^4.18.0",
+    "glob": "^7.2.0",
+    "has": "^1.0.3",
+    "lru-cache": "^4.1.5",
+    "object.assign": "^4.1.2",
+    "winston": "^2.4.5"
   },
   "engines": {
     "node": ">= 0.10"
+  },
+  "greenkeeper": {
+    "ignore": [
+      "mocha",
+      "sinon"
+    ]
   }
 }

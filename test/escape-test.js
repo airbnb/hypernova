@@ -50,7 +50,7 @@ describe('escaping', () => {
       assert.equal(
         script1,
         script3,
-        'third toScript after a fromScript call results in the same HTML'
+        'third toScript after a fromScript call results in the same HTML',
       );
 
       assert.isObject(res);

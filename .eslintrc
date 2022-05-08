@@ -1,15 +1,35 @@
 {
   "root": true,
-  "extends": "airbnb",
+  "extends": "airbnb-base",
   "env": {
-    "es6": true
+    "node": true,
   },
-  "ecmaFeatures": {
-    "modules": true,
-    "jsx": true
-  },
+
   "rules": {
+    "function-paren-newline": 0,
     "no-console": 0,
-    "no-underscore-dangle": 1
-  }
+    "no-underscore-dangle": 1,
+    "object-curly-newline": 0,
+    "max-len": 0,
+  },
+
+  "overrides": [
+    {
+      "files": "test/**/*",
+      "env": {
+        "mocha": true,
+      },
+      "rules": {
+        "indent": 1,
+        "prefer-promise-reject-errors": 0,
+      },
+    },
+    {
+      "files": "test/components/**/*",
+      "rules": {
+        "object-shorthand": 0,
+        "func-names": 0,
+      },
+    },
+  ],
 }

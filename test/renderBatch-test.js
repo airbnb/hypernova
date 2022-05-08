@@ -1,6 +1,8 @@
 import { assert } from 'chai';
 import renderBatch from '../lib/utils/renderBatch';
 
+/* eslint max-classes-per-file: 1 */
+
 class Response {
   status(status) {
     this._status = status;
@@ -12,7 +14,7 @@ class Response {
     return this;
   }
 
-  end() {}
+  end() {} // eslint-disable-line class-methods-use-this
 
   getResponse() {
     return {
@@ -41,99 +43,107 @@ function makeExpress() {
 }
 
 describe('renderBatch', () => {
-  it('returns a batch properly', (done) => {
-    const expressRoute = renderBatch({
-      getComponent() {
-        return null;
-      },
-      plugins: [],
-    }, () => false);
+  [true, false].forEach((processJobsConcurrently) => {
+    describe(`when processJobsConcurrently is ${processJobsConcurrently}`, () => {
+      it('returns a batch properly', (done) => {
+        const expressRoute = renderBatch({
+          getComponent() {
+            return null;
+          },
+          plugins: [],
+          processJobsConcurrently,
+        }, () => false);
 
-    const { req, res } = makeExpress();
+        const { req, res } = makeExpress();
 
-    expressRoute(req, res).then(() => {
-      assert.isObject(res.getResponse());
+        expressRoute(req, res).then(() => {
+          assert.isObject(res.getResponse());
 
-      const { status, json } = res.getResponse();
+          const { status, json } = res.getResponse();
 
-      assert.isDefined(status);
+          assert.isDefined(status);
 
-      assert.equal(status, 200);
+          assert.equal(status, 200);
 
-      assert.isTrue(json.success);
-      assert.isNull(json.error);
+          assert.isTrue(json.success);
+          assert.isNull(json.error);
 
-      const { a } = json.results;
-      assert.isDefined(a);
-      assert.property(a, 'html');
-      assert.property(a, 'meta');
-      assert.property(a, 'duration');
-      assert.property(a, 'success');
-      assert.property(a, 'error');
+          const { a } = json.results;
+          assert.isDefined(a);
+          assert.property(a, 'html');
+          assert.property(a, 'meta');
+          assert.property(a, 'duration');
+          assert.property(a, 'success');
+          assert.property(a, 'error');
 
-      done();
-    });
-  });
+          done();
+        });
+      });
 
-  it('rejects a Promise with a string and its ok', (done) => {
-    const expressRoute = renderBatch({
-      getComponent() {
-        return Promise.reject('Nope');
-      },
-      plugins: [],
-    }, () => false);
+      it('rejects a Promise with a string and its ok', (done) => {
+        const expressRoute = renderBatch({
+          getComponent() {
+            return Promise.reject('Nope');
+          },
+          plugins: [],
+          processJobsConcurrently,
+        }, () => false);
 
-    const { req, res } = makeExpress();
+        const { req, res } = makeExpress();
 
-    expressRoute(req, res).then(() => {
-      const { json } = res.getResponse();
-      const { a } = json.results;
+        expressRoute(req, res).then(() => {
+          const { json } = res.getResponse();
+          const { a } = json.results;
 
-      assert.equal(a.error.name, 'Error');
-      assert.equal(a.error.message, 'Nope');
+          assert.equal(a.error.name, 'Error');
+          assert.equal(a.error.message, 'Nope');
 
-      done();
-    });
-  });
+          done();
+        });
+      });
 
-  it('rejects a Promise with a ReferenceError', (done) => {
-    const expressRoute = renderBatch({
-      getComponent() {
-        return Promise.reject(new ReferenceError());
-      },
-      plugins: [],
-    }, () => false);
+      it('rejects a Promise with a ReferenceError', (done) => {
+        const expressRoute = renderBatch({
+          getComponent() {
+            return Promise.reject(new ReferenceError());
+          },
+          plugins: [],
+          processJobsConcurrently,
+        }, () => false);
 
-    const { req, res } = makeExpress();
+        const { req, res } = makeExpress();
 
-    expressRoute(req, res).then(() => {
-      const { json } = res.getResponse();
-      const { a } = json.results;
+        expressRoute(req, res).then(() => {
+          const { json } = res.getResponse();
+          const { a } = json.results;
 
-      assert.equal(a.error.name, 'ReferenceError');
+          assert.equal(a.error.name, 'ReferenceError');
 
-      done();
-    });
-  });
+          done();
+        });
+      });
 
-  it('rejects a Promise with an Array', (done) => {
-    const expressRoute = renderBatch({
-      getComponent() {
-        return Promise.reject([1, 2, 3]);
-      },
-      plugins: [],
-    }, () => false);
+      it('rejects a Promise with an Array', (done) => {
+        const expressRoute = renderBatch({
+          getComponent() {
+            return Promise.reject([1, 2, 3]);
+          },
+          plugins: [],
+          processJobsConcurrently,
+        }, () => false);
 
-    const { req, res } = makeExpress();
+        const { req, res } = makeExpress();
 
-    expressRoute(req, res).then(() => {
-      const { json } = res.getResponse();
-      const { a } = json.results;
+        expressRoute(req, res).then(() => {
+          const { json } = res.getResponse();
+          const { a } = json.results;
 
-      assert.equal(a.error.name, 'Error');
-      assert.equal(a.error.message, '1,2,3');
+          assert.equal(a.error.name, 'Error');
+          assert.equal(a.error.message, '1,2,3');
 
-      done();
+          done();
+        });
+      });
     });
   });
 });

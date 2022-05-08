@@ -11,7 +11,7 @@ function isNotMethod(name) {
 
 function del(obj) {
   /* eslint no-param-reassign: 0 */
-  return key => { delete obj[key]; };
+  return (key) => { delete obj[key]; };
 }
 
 function toFastProperties(obj) {

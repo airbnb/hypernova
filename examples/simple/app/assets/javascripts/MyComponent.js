@@ -3,7 +3,7 @@ var renderReact = require('hypernova-react').renderReact;
 
 function MyComponent(props) {
   return React.createElement('div', {
-    onClick: function () {
+    onClick() {
       alert('Click handlers work.');
     },
   }, 'Hello, ' + props.name + '!');

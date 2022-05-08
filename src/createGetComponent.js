@@ -9,9 +9,10 @@ import createVM from './createVM';
 export default (files, vmOptions) => {
   const fileEntries = Object.entries(files);
 
-  const vm = createVM(Object.assign({
+  const vm = createVM({
     cacheSize: fileEntries.length,
-  }, vmOptions));
+    ...vmOptions,
+  });
 
   const resolvedFiles = fileEntries.reduce((components, [fileName, filePath]) => {
     const code = fs.readFileSync(filePath, 'utf-8');

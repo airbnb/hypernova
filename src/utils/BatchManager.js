@@ -1,3 +1,8 @@
+const noHTMLError = new TypeError(
+  'HTML was not returned to Hypernova, this is most likely an error within your application. Check your logs for any uncaught errors and/or rejections.',
+);
+noHTMLError.stack = null;
+
 function errorToSerializable(error) {
   // istanbul ignore next
   if (error === undefined) throw new TypeError('No error was passed');
@@ -6,8 +11,8 @@ function errorToSerializable(error) {
   // if it's not an actual error then we won't create an Error so that there is no stack trace
   // because no stack trace is better than a stack trace that is generated here.
   const err = (
-    Object.prototype.toString.call(error) === '[object Error]' &&
-    typeof error.stack === 'string'
+    Object.prototype.toString.call(error) === '[object Error]'
+    && typeof error.stack === 'string'
   ) ? error : { name: 'Error', type: 'Error', message: error, stack: '' };
 
   return {
@@ -25,7 +30,7 @@ function notFound(name) {
   error.stack = [stack[0]]
     .concat(
       `    at YOUR-COMPONENT-DID-NOT-REGISTER_${name}:1:1`,
-      stack.slice(1)
+      stack.slice(1),
     )
     .join('\n');
 
@@ -94,7 +99,6 @@ class BatchManager {
       return obj;
     }, {});
 
-
     // Each plugin receives it's own little key-value data store that is scoped privately
     // to the plugin for the life time of the request. This is achieved simply through lexical
     // closure.
@@ -109,24 +113,22 @@ class BatchManager {
    * job token passed in).
    */
   getRequestContext(plugin, token) {
-    return Object.assign(
-      {},
-      this.baseContext,
-      this.jobContexts[token],
-      this.pluginContexts.get(plugin)
-    );
+    return {
+      ...this.baseContext,
+      ...this.jobContexts[token],
+      ...this.pluginContexts.get(plugin),
+    };
   }
 
   /**
    * Returns a context object scoped to a specific plugin and batch.
    */
   getBatchContext(plugin) {
-    return Object.assign(
-      {},
-      this.baseContext,
-      this.batchContext,
-      this.pluginContexts.get(plugin)
-    );
+    return {
+      ...this.baseContext,
+      ...this.batchContext,
+      ...this.pluginContexts.get(plugin),
+    };
   }
 
   contextFor(plugin, token) {
@@ -140,7 +142,7 @@ class BatchManager {
   render(token) {
     const start = now();
     const context = this.jobContexts[token];
-    const name = context.name;
+    const { name } = context;
 
     const { getComponent } = this.config;
 
@@ -151,22 +153,19 @@ class BatchManager {
       if (!renderFn || typeof renderFn !== 'function') {
         // component not registered
         context.statusCode = 404;
-        context.duration = msSince(start);
-        throw notFound(name);
+        return Promise.reject(notFound(name));
       }
 
-      let response = null;
-
-      // render the component!
-      try {
-        context.html = renderFn(context.props);
-      } catch (e) {
-        response = Promise.reject(e);
-      } finally {
-        context.duration = msSince(start);
+      return renderFn(context.props);
+    }).then((html) => { // eslint-disable-line consistent-return
+      if (!html) {
+        return Promise.reject(noHTMLError);
       }
-
-      return response;
+      context.html = html;
+      context.duration = msSince(start);
+    }).catch((err) => {
+      context.duration = msSince(start);
+      return Promise.reject(err);
     });
   }
 

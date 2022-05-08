@@ -1,0 +1,19 @@
+name: 'Tests: node.js < 10'
+
+on: [pull_request, push]
+
+jobs:
+  tests:
+    uses: ljharb/actions/.github/workflows/node.yml@main
+    with:
+      range: '>= 4 < 10' # node < 4 breaks due to babel; we'll need staged builds for this
+      type: majors
+      command: npm run tests-only
+      skip-ls-check: true
+
+  node:
+    name: 'node < 10'
+    needs: [tests]
+    runs-on: ubuntu-latest
+    steps:
+      - run: 'echo tests completed'

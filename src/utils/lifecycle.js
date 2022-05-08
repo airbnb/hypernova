@@ -14,7 +14,7 @@ const PROMISE_TIMEOUT = {};
  * @returns {Function} - the resulting predicate function
  */
 export function hasMethod(name) {
-  return obj => typeof obj[name] === 'function';
+  return (obj) => typeof obj[name] === 'function';
 }
 
 /**
@@ -24,13 +24,22 @@ export function hasMethod(name) {
  * @returns {Promise}
  */
 export function raceTo(promise, ms, msg) {
+  let timeout;
+
   return Promise.race([
     promise,
-    new Promise(resolve => setTimeout(() => resolve(PROMISE_TIMEOUT), ms)),
+    new Promise((resolve) => {
+      timeout = setTimeout(() => resolve(PROMISE_TIMEOUT), ms);
+    }),
   ]).then((res) => {
     if (res === PROMISE_TIMEOUT) logger.info(msg, { timeout: ms });
+    if (timeout) clearTimeout(timeout);
 
     return res;
+  }).catch((err) => {
+    if (timeout) clearTimeout(timeout);
+
+    return Promise.reject(err);
   });
 }
 
@@ -53,15 +62,13 @@ export function raceTo(promise, ms, msg) {
 export function runAppLifecycle(lifecycle, plugins, config, error, ...args) {
   try {
     const promise = Promise.all(
-      plugins
-        .filter(hasMethod(lifecycle))
-        .map(plugin => plugin[lifecycle](config, error, ...args))
+      plugins.filter(hasMethod(lifecycle)).map((plugin) => plugin[lifecycle](config, error, ...args)),
     );
 
     return raceTo(
       promise,
       MAX_LIFECYCLE_EXECUTION_TIME_IN_MS,
-      `App lifecycle method ${lifecycle} took too long.`
+      `App lifecycle method ${lifecycle} took too long.`,
     );
   } catch (err) {
     return Promise.reject(err);
@@ -90,13 +97,13 @@ export function runLifecycle(lifecycle, plugins, manager, token) {
     const promise = Promise.all(
       plugins
         .filter(hasMethod(lifecycle))
-        .map(plugin => plugin[lifecycle](manager.contextFor(plugin, token)))
+        .map((plugin) => plugin[lifecycle](manager.contextFor(plugin, token))),
     );
 
     return raceTo(
       promise,
       MAX_LIFECYCLE_EXECUTION_TIME_IN_MS,
-      `Lifecycle method ${lifecycle} took too long.`
+      `Lifecycle method ${lifecycle} took too long.`,
     );
   } catch (err) {
     return Promise.reject(err);
@@ -117,7 +124,7 @@ export function runLifecycle(lifecycle, plugins, manager, token) {
 export function runLifecycleSync(lifecycle, plugins, manager, token) {
   plugins
     .filter(hasMethod(lifecycle))
-    .forEach(plugin => plugin[lifecycle](manager.contextFor(plugin, token)));
+    .forEach((plugin) => plugin[lifecycle](manager.contextFor(plugin, token)));
 }
 
 /**
@@ -134,7 +141,7 @@ export function runLifecycleSync(lifecycle, plugins, manager, token) {
 export function errorSync(err, plugins, manager, token) {
   plugins
     .filter(hasMethod('onError'))
-    .forEach(plugin => plugin.onError(manager.contextFor(plugin, token), err));
+    .forEach((plugin) => plugin.onError(manager.contextFor(plugin, token), err));
 }
 
 /**
@@ -153,24 +160,37 @@ export function processJob(token, plugins, manager) {
     // jobStart
     runLifecycle('jobStart', plugins, manager, token)
 
-    .then(() => {
-      // beforeRender
-      runLifecycleSync('beforeRender', plugins, manager, token);
+      .then(() => {
+        // beforeRender
+        runLifecycleSync('beforeRender', plugins, manager, token);
 
-      // render
-      return manager.render(token);
-    })
-    // jobEnd
-    .then(() => {
-      // afterRender
-      runLifecycleSync('afterRender', plugins, manager, token);
+        // render
+        return manager.render(token);
+      })
+      // jobEnd
+      .then(() => {
+        // afterRender
+        runLifecycleSync('afterRender', plugins, manager, token);
 
-      runLifecycle('jobEnd', plugins, manager, token);
-    })
-    .catch((err) => {
-      manager.recordError(err, token);
-      errorSync(err, plugins, manager, token);
-    })
+        return runLifecycle('jobEnd', plugins, manager, token);
+      })
+      .catch((err) => {
+        manager.recordError(err, token);
+        errorSync(err, plugins, manager, token);
+      })
+  );
+}
+
+function processJobsSerially(jobs, plugins, manager) {
+  return Object.keys(jobs).reduce(
+    (chain, token) => chain.then(() => processJob(token, plugins, manager)),
+    Promise.resolve(),
+  );
+}
+
+function processJobsConcurrently(jobs, plugins, manager) {
+  return Promise.all(
+    Object.keys(jobs).map((token) => processJob(token, plugins, manager)),
   );
 }
 
@@ -185,23 +205,25 @@ export function processJob(token, plugins, manager) {
  * @param {BatchManager} manager
  * @returns {Promise}
  */
-export function processBatch(jobs, plugins, manager) {
+export function processBatch(jobs, plugins, manager, concurrent) {
   return (
     // batchStart
     runLifecycle('batchStart', plugins, manager)
 
-    // for each job, processJob
-    .then(() => Promise.all(
-      Object.keys(jobs).map(token => processJob(token, plugins, manager))
-    ))
+      // for each job, processJob
+      .then(() => {
+        if (concurrent) {
+          return processJobsConcurrently(jobs, plugins, manager);
+        }
 
-    // batchEnd
-    .then(() => {
-      runLifecycle('batchEnd', plugins, manager);
-    })
-    .catch((err) => {
-      manager.recordError(err);
-      errorSync(err, plugins, manager);
-    })
+        return processJobsSerially(jobs, plugins, manager);
+      })
+
+      // batchEnd
+      .then(() => runLifecycle('batchEnd', plugins, manager))
+      .catch((err) => {
+        manager.recordError(err);
+        errorSync(err, plugins, manager);
+      })
   );
 }
