@@ -49,6 +49,7 @@
   },
   "homepage": "https://github.com/airbnb/hypernova",
   "devDependencies": {
+    "@babel/plugin-transform-destructuring": "^7.17.7",
     "aud": "^2.0.0",
     "babel-cli": "^6.26.0",
     "babel-plugin-add-module-exports": "^0.2.1",
