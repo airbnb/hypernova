@@ -95,6 +95,7 @@ class BatchManager {
         duration: null,
         html: null,
         returnMeta: {},
+        resLocals: response.locals,
       };
       return obj;
     }, {});
