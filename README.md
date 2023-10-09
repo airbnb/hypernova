@@ -1,3 +1,8 @@
+| :exclamation: Deprecation Notice |
+|:-|
+|We want to express our sincere gratitude for your support and contributions to the Hypernova open source project. As we are no longer using this technology internally, we have come to the decision to archive the Hypernova repositories. While we won't be providing further updates or support, the existing code and resources will remain accessible for your reference. We encourage anyone interested to fork the repository and continue the project's legacy independently. Thank you for being a part of this journey and for your patience and understanding.|
+---
+
 # Hypernova
 
 > A service for server-side rendering your JavaScript views
