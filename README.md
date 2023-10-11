@@ -108,13 +108,14 @@ Hypernova.configure do |config|
 end
 ```
 
-In your controller, you’ll need an `:around_filter` so you can opt into Hypernova rendering of view partials.
+In your controller, you‘ll need an `:around_action` so you can opt into Hypernova rendering of view partials.
 
 ```ruby
 class SampleController < ApplicationController
-  around_filter :hypernova_render_support
+  around_action :hypernova_render_support
 end
 ```
+Use `:around_filter` instead of `:around_action` if you using version 3.2.13 or older.
 
 And then in your view we `render_react_component`.
 
