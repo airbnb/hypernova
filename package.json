@@ -17,7 +17,7 @@
     "tests-only": "npm run test:quick",
     "posttest": "aud --production",
     "precoverage": "npm run build",
-    "coverage": "babel-node node_modules/.bin/istanbul cover --report html node_modules/.bin/_mocha -- -R tap test/init.js test/*-test.js",
+    "coverage": "babel-node node_modules/.bin/istanbul cover --report html node_modules/.bin/_mocha -- -R tap test/init.js test/*-test.js test/**/*-test.js",
     "postcoverage": "npm run cover:check",
     "cover:check": "istanbul check-coverage && echo code coverage thresholds met, achievement unlocked!",
     "test:quick": "babel-node node_modules/.bin/_mocha -R tap test/init.js test/*-test.js"
