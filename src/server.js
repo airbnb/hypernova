@@ -25,6 +25,7 @@ const defaultConfig = {
   files: [],
   logger: {},
   plugins: [],
+  middlewares: [],
   port: 8080,
   host: '0.0.0.0',
   processJobsConcurrent: true,
